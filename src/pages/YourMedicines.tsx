@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
 
 const medicines = [
   { name: "Atorbin", dosage: "20mg", frequency: "1/day", tag: "cholesterol control" },
@@ -169,9 +170,12 @@ export default function YourMedicines() {
                       <CardTitle className="text-2xl mb-2">
                         {medicine.name} {medicine.dosage}
                       </CardTitle>
-                      <CardDescription className="text-lg">
+                      <CardDescription className="text-lg mb-2">
                         {medicine.frequency}
                       </CardDescription>
+                      <Badge className="bg-yellow-500 text-black hover:bg-yellow-600 text-base capitalize">
+                        {medicine.tag}
+                      </Badge>
                     </div>
                   </div>
                 </CardHeader>
