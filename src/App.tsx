@@ -7,6 +7,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
+import YourDoctors from "./pages/YourDoctors";
 import Schedule from "./pages/Schedule";
 import CheckIn from "./pages/CheckIn";
 import UploadReports from "./pages/UploadReports";
@@ -39,6 +40,7 @@ const App = () => (
                       <main className="flex-1">
                         <Routes>
                           <Route path="/" element={<Index />} />
+                          <Route path="/your-doctors" element={<YourDoctors />} />
                           <Route path="/schedule" element={<Schedule />} />
                           <Route path="/check-in" element={<CheckIn />} />
                           <Route path="/upload-reports" element={<UploadReports />} />
