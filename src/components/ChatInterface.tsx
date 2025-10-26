@@ -13,7 +13,7 @@ const ChatInterface = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Hello! I'm your AI Healthcare Buddy. I'm here to help with health questions, symptom information, and wellness advice. How can I assist you today?",
+      content: "Hello! I'm your AI MedGuard Buffalo assistant. I'm here to help with health questions, symptom information, and wellness advice. How can I assist you today?",
     },
   ]);
   const [input, setInput] = useState("");

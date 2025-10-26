@@ -24,7 +24,7 @@ const Hero = () => {
           
           <h1 className="text-5xl md:text-7xl font-bold text-foreground leading-tight">
             Your Personal
-            <span className="block text-primary mt-2">Healthcare Buddy</span>
+            <span className="block text-primary mt-2">MedGuard Buffalo</span>
           </h1>
           
           <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">

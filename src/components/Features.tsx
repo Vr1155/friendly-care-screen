@@ -29,7 +29,7 @@ const Features = () => {
     <section className="py-20 px-4 bg-accent/20">
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4 text-foreground">Why Choose Healthcare Buddy</h2>
+          <h2 className="text-4xl font-bold mb-4 text-foreground">Why Choose MedGuard Buffalo</h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Combining cutting-edge AI technology with compassionate care to support your health journey
           </p>
