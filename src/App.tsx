@@ -11,6 +11,7 @@ import { Notifications } from "@/components/Notifications";
 import Index from "./pages/Index";
 import YourDoctors from "./pages/YourDoctors";
 import Appointments from "./pages/Appointments";
+import YourMedicines from "./pages/YourMedicines";
 import CheckIn from "./pages/CheckIn";
 import UploadReports from "./pages/UploadReports";
 import UploadPrescriptions from "./pages/UploadPrescriptions";
@@ -51,6 +52,7 @@ const App = () => (
                           <Route path="/" element={<Index />} />
                           <Route path="/your-doctors" element={<YourDoctors />} />
                           <Route path="/appointments" element={<Appointments />} />
+                          <Route path="/your-medicines" element={<YourMedicines />} />
                           <Route path="/check-in" element={<CheckIn />} />
                           <Route path="/upload-reports" element={<UploadReports />} />
                           <Route path="/upload-prescriptions" element={<UploadPrescriptions />} />
