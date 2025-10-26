@@ -8,6 +8,7 @@ import { format } from "date-fns";
 
 interface Appointment {
   id: string;
+  doctor_id: string;
   appointment_date: string;
   status: string;
   notes: string | null;
@@ -19,7 +20,11 @@ interface Appointment {
   };
 }
 
-export default function UpcomingAppointmentsTab() {
+interface UpcomingAppointmentsTabProps {
+  onScheduleForDoctor: (doctorId: string) => void;
+}
+
+export default function UpcomingAppointmentsTab({ onScheduleForDoctor }: UpcomingAppointmentsTabProps) {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -149,7 +154,7 @@ export default function UpcomingAppointmentsTab() {
                     </p>
                   </div>
                 )}
-                <div className="mt-4">
+                <div className="mt-4 flex items-center justify-between">
                   <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
                     appointment.status === 'scheduled' ? 'bg-primary/10 text-primary' :
                     appointment.status === 'completed' ? 'bg-green-500/10 text-green-700' :
@@ -157,6 +162,13 @@ export default function UpcomingAppointmentsTab() {
                   }`}>
                     {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
                   </span>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => onScheduleForDoctor(appointment.doctor_id)}
+                  >
+                    Schedule Another
+                  </Button>
                 </div>
               </CardContent>
             </Card>

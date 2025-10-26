@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calendar } from "lucide-react";
 import UpcomingAppointmentsTab from "@/components/appointments/UpcomingAppointmentsTab";
@@ -5,6 +6,14 @@ import ScheduleAppointmentTab from "@/components/appointments/ScheduleAppointmen
 import PastAppointmentsTab from "@/components/appointments/PastAppointmentsTab";
 
 export default function Appointments() {
+  const [activeTab, setActiveTab] = useState("upcoming");
+  const [selectedDoctorId, setSelectedDoctorId] = useState<string | null>(null);
+
+  const handleScheduleForDoctor = (doctorId: string) => {
+    setSelectedDoctorId(doctorId);
+    setActiveTab("schedule");
+  };
+
   return (
     <div className="container mx-auto p-6">
       <div className="mb-6">
@@ -15,7 +24,7 @@ export default function Appointments() {
         <p className="text-muted-foreground mt-2">Manage all your doctor appointments</p>
       </div>
 
-      <Tabs defaultValue="upcoming" className="w-full">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-3 mb-6">
           <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
           <TabsTrigger value="schedule">Schedule New</TabsTrigger>
@@ -23,11 +32,11 @@ export default function Appointments() {
         </TabsList>
 
         <TabsContent value="upcoming">
-          <UpcomingAppointmentsTab />
+          <UpcomingAppointmentsTab onScheduleForDoctor={handleScheduleForDoctor} />
         </TabsContent>
 
         <TabsContent value="schedule">
-          <ScheduleAppointmentTab />
+          <ScheduleAppointmentTab preSelectedDoctorId={selectedDoctorId} />
         </TabsContent>
 
         <TabsContent value="past">
