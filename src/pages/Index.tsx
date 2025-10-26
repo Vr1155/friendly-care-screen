@@ -250,7 +250,7 @@ const Index = () => {
             <TooltipProvider>
               <div className="space-y-3">
                 {/* Icons Row */}
-                <div className="flex items-center justify-between px-1">
+                <div className="flex items-start justify-between gap-2">
                   {checkIns.map((item) => {
                     const ItemIcon = item.icon;
                     return (
@@ -258,7 +258,7 @@ const Index = () => {
                         <TooltipTrigger asChild>
                           <button
                             onClick={() => toggleCheckIn(item.id)}
-                            className="flex flex-col items-center gap-1 hover:scale-110 transition-transform"
+                            className="flex flex-col items-center gap-2 hover:scale-105 transition-transform flex-1"
                           >
                             <div className={`w-10 h-10 flex items-center justify-center rounded-full transition-all ${
                               item.completed ? 'bg-teal-600/10' : 'bg-muted'
@@ -272,6 +272,11 @@ const Index = () => {
                             <ItemIcon className={`w-4 h-4 ${
                               item.completed ? 'text-teal-600' : 'text-muted-foreground'
                             }`} />
+                            <span className={`text-xs text-center leading-tight ${
+                              item.completed ? 'text-teal-600 font-medium' : 'text-muted-foreground'
+                            }`}>
+                              {item.label}
+                            </span>
                           </button>
                         </TooltipTrigger>
                         <TooltipContent>
