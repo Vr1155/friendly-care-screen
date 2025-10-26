@@ -1,4 +1,4 @@
-import { Calendar, Upload, Home, Stethoscope, Tablets } from "lucide-react";
+import { Calendar, Upload, Home, Stethoscope, Tablets, MapPin } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 import {
@@ -18,6 +18,7 @@ const menuItems = [
   { title: "Your Doctors", url: "/your-doctors", icon: Stethoscope },
   { title: "Appointments", url: "/appointments", icon: Calendar },
   { title: "Your Medicines", url: "/your-medicines", icon: Tablets },
+  { title: "Your Network", url: "/your-network", icon: MapPin },
 ];
 
 export function AppSidebar() {

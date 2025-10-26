@@ -12,6 +12,7 @@ import Index from "./pages/Index";
 import YourDoctors from "./pages/YourDoctors";
 import Appointments from "./pages/Appointments";
 import YourMedicines from "./pages/YourMedicines";
+import YourNetwork from "./pages/YourNetwork";
 import Profile from "./pages/Profile";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
@@ -47,11 +48,12 @@ const App = () => (
                       <main className="flex-1">
                         <Routes>
                           <Route path="/" element={<Index />} />
-                          <Route path="/your-doctors" element={<YourDoctors />} />
-                          <Route path="/appointments" element={<Appointments />} />
-                          <Route path="/your-medicines" element={<YourMedicines />} />
-                          <Route path="/profile" element={<Profile />} />
-                          <Route path="*" element={<NotFound />} />
+                  <Route path="/your-doctors" element={<YourDoctors />} />
+                  <Route path="/appointments" element={<Appointments />} />
+                  <Route path="/your-medicines" element={<YourMedicines />} />
+                  <Route path="/your-network" element={<YourNetwork />} />
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="*" element={<NotFound />} />
                         </Routes>
                       </main>
                     </div>
