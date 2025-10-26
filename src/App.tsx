@@ -7,6 +7,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { UserProfile } from "@/components/UserProfile";
+import { Notifications } from "@/components/Notifications";
 import Index from "./pages/Index";
 import YourDoctors from "./pages/YourDoctors";
 import Appointments from "./pages/Appointments";
@@ -40,7 +41,10 @@ const App = () => (
                           <SidebarTrigger />
                           <h2 className="ml-4 text-lg font-semibold text-foreground">MedGuard Buffalo</h2>
                         </div>
-                        <UserProfile />
+                        <div className="flex items-center gap-2">
+                          <Notifications />
+                          <UserProfile />
+                        </div>
                       </header>
                       <main className="flex-1">
                         <Routes>
