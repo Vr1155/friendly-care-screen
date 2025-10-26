@@ -12,6 +12,7 @@ import Index from "./pages/Index";
 import YourDoctors from "./pages/YourDoctors";
 import Appointments from "./pages/Appointments";
 import YourMedicines from "./pages/YourMedicines";
+import Dietary from "./pages/Dietary";
 import YourNetwork from "./pages/YourNetwork";
 import Profile from "./pages/Profile";
 import Auth from "./pages/Auth";
@@ -51,6 +52,7 @@ const App = () => (
                   <Route path="/your-doctors" element={<YourDoctors />} />
                   <Route path="/appointments" element={<Appointments />} />
                   <Route path="/your-medicines" element={<YourMedicines />} />
+                  <Route path="/dietary" element={<Dietary />} />
                   <Route path="/your-network" element={<YourNetwork />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="*" element={<NotFound />} />

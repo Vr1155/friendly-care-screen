@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Pill, Upload, FileText, Image as ImageIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Pill, Upload, FileText, Image as ImageIcon, Utensils } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -47,6 +48,7 @@ const prescriptionFiles = [
 ];
 
 export default function YourMedicines() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("medicines");
   const [previewFile, setPreviewFile] = useState<{ filename: string; type: string; fileUrl: string } | null>(null);
   const [selectedFilter, setSelectedFilter] = useState("all");
@@ -68,13 +70,23 @@ export default function YourMedicines() {
           </p>
         </div>
         
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button size="lg">
-              <Upload className="h-5 w-5 mr-2" />
-              Upload Prescription
-            </Button>
-          </DialogTrigger>
+        <div className="flex items-center gap-3">
+          <Button 
+            size="lg"
+            onClick={() => navigate('/dietary')}
+            aria-label="Open Dietary recommendations"
+          >
+            <Utensils className="h-5 w-5 mr-2" />
+            Dietary Recommendation
+          </Button>
+          
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button size="lg">
+                <Upload className="h-5 w-5 mr-2" />
+                Upload Prescription
+              </Button>
+            </DialogTrigger>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2 text-xl">
@@ -123,6 +135,7 @@ export default function YourMedicines() {
             </div>
           </DialogContent>
         </Dialog>
+        </div>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">

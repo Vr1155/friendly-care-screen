@@ -1,4 +1,4 @@
-import { Calendar, Upload, Home, Stethoscope, Tablets, MapPin } from "lucide-react";
+import { Calendar, Upload, Home, Stethoscope, Tablets, MapPin, Utensils } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 import {
@@ -18,6 +18,7 @@ const menuItems = [
   { title: "Doctors", url: "/your-doctors", icon: Stethoscope },
   { title: "Appointments", url: "/appointments", icon: Calendar },
   { title: "Medicines", url: "/your-medicines", icon: Tablets },
+  { title: "Dietary recommendations", url: "/dietary", icon: Utensils },
   { title: "Coverage", url: "/your-network", icon: MapPin },
 ];
 
