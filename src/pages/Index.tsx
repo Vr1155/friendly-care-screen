@@ -236,18 +236,6 @@ const Index = () => {
         </Button>
       </div>
 
-      {/* AI Chat Preview Card */}
-      <Card className="shadow-[var(--shadow-soft)] bg-accent/50 cursor-pointer hover:bg-accent/70 transition-colors" onClick={() => setIsChatOpen(true)}>
-        <CardContent className="p-4">
-          <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
-              <MessageCircle className="w-4 h-4 text-primary-foreground" />
-            </div>
-            <p className="text-sm text-foreground">You did your morning walk — keep it up. Ask me anything...</p>
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Two Column Layout for Upcoming & Caregiver */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Upcoming Items Section */}
@@ -455,6 +443,15 @@ const Index = () => {
           <ChatInterface />
         </DialogContent>
       </Dialog>
+
+      {/* Floating Chat Button */}
+      <Button
+        onClick={() => setIsChatOpen(true)}
+        size="lg"
+        className="fixed bottom-6 right-6 h-16 w-16 rounded-full bg-blue-600 hover:bg-blue-700 shadow-lg z-50 animate-fade-in"
+      >
+        <MessageCircle className="w-8 h-8 text-white" />
+      </Button>
       </div>
     </>
   );
