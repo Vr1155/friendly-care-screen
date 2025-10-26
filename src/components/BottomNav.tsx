@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { Heart, Calendar, Pill, Utensils, MapPin } from "lucide-react";
+import { Home, Calendar, Pill, Utensils, MapPin } from "lucide-react";
 
 export function BottomNav() {
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ export function BottomNav() {
           className="flex flex-col items-center justify-center gap-1 -mt-6 transition-transform hover:scale-105"
         >
           <div className="w-16 h-16 rounded-full bg-teal-600 flex items-center justify-center shadow-lg mb-1">
-            <Heart className="w-8 h-8 text-white fill-white" />
+            <Home className="w-8 h-8 text-white" />
           </div>
           <span className="text-xs text-foreground font-medium">Home</span>
         </button>
