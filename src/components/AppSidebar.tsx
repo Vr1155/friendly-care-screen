@@ -1,7 +1,5 @@
-import { Calendar, FileText, Upload, Pill, Home, LogOut, Stethoscope, CalendarCheck } from "lucide-react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
+import { Calendar, FileText, Upload, Pill, Home, Stethoscope, CalendarCheck } from "lucide-react";
+import { NavLink } from "react-router-dom";
 
 import {
   Sidebar,
@@ -27,25 +25,6 @@ const menuItems = [
 
 export function AppSidebar() {
   const { open } = useSidebar();
-  const navigate = useNavigate();
-  const { toast } = useToast();
-
-  const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      toast({
-        title: "Error",
-        description: "Failed to log out",
-        variant: "destructive",
-      });
-    } else {
-      toast({
-        title: "Success",
-        description: "Logged out successfully",
-      });
-      navigate("/auth");
-    }
-  };
 
   return (
     <Sidebar collapsible="icon">
@@ -71,18 +50,6 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup className="mt-auto">
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton onClick={handleLogout}>
-                  <LogOut className="h-4 w-4" />
-                  {open && <span>Logout</span>}
-                </SidebarMenuButton>
-              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

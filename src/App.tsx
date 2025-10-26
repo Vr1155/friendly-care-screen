@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { UserProfile } from "@/components/UserProfile";
 import Index from "./pages/Index";
 import YourDoctors from "./pages/YourDoctors";
 import UpcomingAppointments from "./pages/UpcomingAppointments";
@@ -34,9 +35,12 @@ const App = () => (
                   <div className="flex min-h-screen w-full">
                     <AppSidebar />
                     <div className="flex-1 flex flex-col w-full">
-                      <header className="h-14 border-b bg-background flex items-center px-4 sticky top-0 z-10">
-                        <SidebarTrigger />
-                        <h2 className="ml-4 text-lg font-semibold text-foreground">MedGuard Buffalo</h2>
+                      <header className="h-14 border-b bg-background flex items-center justify-between px-4 sticky top-0 z-10">
+                        <div className="flex items-center">
+                          <SidebarTrigger />
+                          <h2 className="ml-4 text-lg font-semibold text-foreground">MedGuard Buffalo</h2>
+                        </div>
+                        <UserProfile />
                       </header>
                       <main className="flex-1">
                         <Routes>
