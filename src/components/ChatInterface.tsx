@@ -6,7 +6,6 @@ import { Send, Bot, User, Mic, Square, Volume2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { AudioRecorder } from "@/utils/AudioRecorder";
-import { elevenSpeak } from "@/utils/elevenTTS";
 
 interface Message {
   role: "user" | "assistant";
@@ -119,12 +118,19 @@ const ChatInterface = () => {
           }
         }
 
-        // Convert response to speech with ElevenLabs
-        try {
+        // Convert response to speech
+        const { data: ttsData, error: ttsError } = await supabase.functions.invoke('text-to-speech', {
+          body: { text: assistantContent }
+        });
+
+        if (ttsError) throw ttsError;
+
+        // Play audio
+        if (audioRef.current && ttsData.audioData) {
           setIsPlaying(true);
-          await elevenSpeak(assistantContent);
-        } finally {
-          setIsPlaying(false);
+          audioRef.current.src = `data:audio/mpeg;base64,${ttsData.audioData}`;
+          audioRef.current.onended = () => setIsPlaying(false);
+          await audioRef.current.play();
         }
 
       } catch (error: any) {
@@ -302,13 +308,13 @@ const ChatInterface = () => {
               </div>
               {isRecording && (
                 <p className="text-xs text-primary mt-2 text-center animate-pulse">
-                  🎙 Listening… Tap to stop.
+                  🎤 Listening... Tap mic again to stop
                 </p>
               )}
               {isPlaying && (
-                <p className="text-xs text-primary mt-2 text-center flex items-center justify-center gap-1 animate-pulse">
+                <p className="text-xs text-primary mt-2 text-center flex items-center justify-center gap-1">
                   <Volume2 className="w-3 h-3" />
-                  🔊 Speaking response…
+                  Playing response...
                 </p>
               )}
               <p className="text-xs text-muted-foreground mt-2 text-center">
