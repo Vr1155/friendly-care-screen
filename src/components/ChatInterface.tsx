@@ -18,22 +18,85 @@ const ChatInterface = () => {
   ]);
   const [input, setInput] = useState("");
 
-  const handleSend = () => {
-    if (!input.trim()) return;
+  const [isLoading, setIsLoading] = useState(false);
 
-    setMessages([...messages, { role: "user", content: input }]);
+  const handleSend = async () => {
+    if (!input.trim() || isLoading) return;
+
+    const userMessage: Message = { role: "user", content: input };
+    setMessages([...messages, userMessage]);
     setInput("");
+    setIsLoading(true);
 
-    // Simulate AI response
-    setTimeout(() => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({
+            messages: [...messages, userMessage],
+          }),
+        }
+      );
+
+      if (!response.ok || !response.body) {
+        throw new Error("Failed to get response from AI");
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let assistantContent = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value);
+        const lines = chunk.split("\n");
+
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            const data = line.slice(6);
+            if (data === "[DONE]") continue;
+
+            try {
+              const parsed = JSON.parse(data);
+              const content = parsed.choices?.[0]?.delta?.content;
+              if (content) {
+                assistantContent += content;
+                setMessages((prev) => {
+                  const lastMessage = prev[prev.length - 1];
+                  if (lastMessage?.role === "assistant") {
+                    return [
+                      ...prev.slice(0, -1),
+                      { role: "assistant", content: assistantContent },
+                    ];
+                  }
+                  return [...prev, { role: "assistant", content: assistantContent }];
+                });
+              }
+            } catch (e) {
+              // Skip invalid JSON
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error calling AI:", error);
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content: "I understand your concern. While I can provide general health information, please remember that I'm an AI assistant and not a replacement for professional medical advice. For serious concerns, always consult with a healthcare provider.",
+          content: "I apologize, but I'm having trouble connecting right now. Please try again in a moment.",
         },
       ]);
-    }, 1000);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -86,6 +149,7 @@ const ChatInterface = () => {
                   variant="default"
                   size="icon"
                   className="flex-shrink-0"
+                  disabled={isLoading}
                 >
                   <Send className="w-4 h-4" />
                 </Button>
