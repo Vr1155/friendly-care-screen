@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const medicines = [
   { name: "Atorbin", dosage: "20mg", frequency: "1/day", tag: "cholesterol control" },
@@ -138,18 +139,22 @@ export default function YourMedicines() {
         </TabsList>
 
         <TabsContent value="medicines" className="space-y-6">
-          <div className="flex flex-wrap gap-3 mb-6">
-            {filterTags.map((tag) => (
-              <Button
-                key={tag}
-                variant={selectedFilter === tag ? "default" : "outline"}
-                size="lg"
-                className="text-base capitalize"
-                onClick={() => setSelectedFilter(tag)}
-              >
-                {tag}
-              </Button>
-            ))}
+          <div className="flex items-center gap-3 mb-6">
+            <Label htmlFor="filter-select" className="text-lg font-medium whitespace-nowrap">
+              Filter by:
+            </Label>
+            <Select value={selectedFilter} onValueChange={setSelectedFilter}>
+              <SelectTrigger id="filter-select" className="w-64 text-lg h-12 bg-background">
+                <SelectValue placeholder="Select a category" />
+              </SelectTrigger>
+              <SelectContent className="bg-background z-50">
+                {filterTags.map((tag) => (
+                  <SelectItem key={tag} value={tag} className="text-lg capitalize cursor-pointer">
+                    {tag}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="grid gap-6">
