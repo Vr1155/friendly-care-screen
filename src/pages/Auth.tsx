@@ -84,11 +84,6 @@ export default function Auth() {
           <CardDescription className="text-center">
             {isLogin ? "Sign in to your account" : "Create a new account"}
           </CardDescription>
-          <div className="bg-secondary/20 p-3 rounded-md text-sm text-center">
-            <p className="font-medium">Demo Credentials:</p>
-            <p>Email: user@demo.com</p>
-            <p>Password: 1234</p>
-          </div>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleAuth} className="space-y-4">
