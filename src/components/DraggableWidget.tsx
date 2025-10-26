@@ -6,7 +6,7 @@ interface DraggableWidgetProps {
   initialY?: number;
 }
 
-const DraggableWidget = ({ children, initialX = 24, initialY = 24 }: DraggableWidgetProps) => {
+const DraggableWidget = ({ children, initialX = 24, initialY = 100 }: DraggableWidgetProps) => {
   const [position, setPosition] = useState({ x: initialX, y: initialY });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
@@ -52,8 +52,8 @@ const DraggableWidget = ({ children, initialX = 24, initialY = 24 }: DraggableWi
       ref={widgetRef}
       className={`fixed z-50 ${isDragging ? "cursor-grabbing" : "cursor-grab"}`}
       style={{
-        right: `${position.x}px`,
-        bottom: `${position.y}px`,
+        left: `${position.x}px`,
+        top: `${position.y}px`,
       }}
       onMouseDown={handleMouseDown}
     >
