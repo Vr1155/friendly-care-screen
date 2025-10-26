@@ -448,9 +448,9 @@ const Index = () => {
       <Button
         onClick={() => setIsChatOpen(true)}
         size="lg"
-        className="fixed bottom-6 right-6 h-16 w-16 rounded-full bg-blue-600 hover:bg-blue-700 shadow-lg z-50 animate-fade-in"
+        className="fixed bottom-8 right-8 h-16 w-16 rounded-full bg-teal-600 hover:bg-teal-700 shadow-xl z-50 animate-fade-in"
       >
-        <MessageCircle className="w-8 h-8 text-white" />
+        <MessageCircle className="w-7 h-7 text-white" />
       </Button>
       </div>
     </>
