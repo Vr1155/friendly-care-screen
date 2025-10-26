@@ -204,8 +204,8 @@ const Index = () => {
           <CardContent className="space-y-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <span className="text-5xl">😊</span>
                 <p className="text-3xl font-bold text-foreground">Feeling good!</p>
+                <span className="text-5xl">😊</span>
               </div>
               <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
                 <Check className="w-6 h-6 text-primary" />
