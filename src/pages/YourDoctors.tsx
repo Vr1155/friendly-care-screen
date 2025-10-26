@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, User, Phone, MapPin, Trash2 } from "lucide-react";
+import { Plus, User, Phone, MapPin, Trash2, Calendar } from "lucide-react";
 
 interface Doctor {
   id: string;
@@ -24,6 +25,7 @@ export default function YourDoctors() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -215,6 +217,16 @@ export default function YourDoctors() {
                 <span>{doctor.address}</span>
               </div>
             </CardContent>
+            <CardFooter>
+              <Button 
+                onClick={() => navigate('/schedule')} 
+                className="w-full"
+                variant="default"
+              >
+                <Calendar className="h-4 w-4 mr-2" />
+                Schedule Appointment
+              </Button>
+            </CardFooter>
           </Card>
         ))}
 
