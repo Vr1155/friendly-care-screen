@@ -33,7 +33,7 @@ const YourNetwork = () => {
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Header */}
         <div className="space-y-2">
-          <h1 className="text-4xl font-bold text-foreground">Your Network</h1>
+          <h1 className="text-4xl font-bold text-foreground">Coverage</h1>
           <p className="text-xl text-muted-foreground">
             Find nearby pharmacies and doctors covered by your insurance
           </p>

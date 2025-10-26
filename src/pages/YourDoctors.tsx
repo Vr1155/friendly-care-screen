@@ -168,7 +168,7 @@ export default function YourDoctors() {
     <div className="container mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Your Doctors</h1>
+          <h1 className="text-3xl font-bold text-foreground">Doctors</h1>
           <p className="text-muted-foreground mt-2">Manage your healthcare providers</p>
         </div>
       </div>

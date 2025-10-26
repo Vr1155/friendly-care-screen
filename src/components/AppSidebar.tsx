@@ -15,10 +15,10 @@ import {
 
 const menuItems = [
   { title: "Home", url: "/", icon: Home },
-  { title: "Your Doctors", url: "/your-doctors", icon: Stethoscope },
+  { title: "Doctors", url: "/your-doctors", icon: Stethoscope },
   { title: "Appointments", url: "/appointments", icon: Calendar },
-  { title: "Your Medicines", url: "/your-medicines", icon: Tablets },
-  { title: "Your Network", url: "/your-network", icon: MapPin },
+  { title: "Medicines", url: "/your-medicines", icon: Tablets },
+  { title: "Coverage", url: "/your-network", icon: MapPin },
 ];
 
 export function AppSidebar() {
