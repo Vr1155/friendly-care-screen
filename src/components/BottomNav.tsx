@@ -11,15 +11,6 @@ export function BottomNav() {
     <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border shadow-[var(--shadow-soft)] z-50">
       <div className="flex justify-around items-center h-16 max-w-2xl mx-auto">
         <button 
-          onClick={() => navigate("/")}
-          className={`flex flex-col items-center justify-center gap-1 px-3 py-2 transition-colors ${
-            isActive("/") ? "text-primary" : "text-muted-foreground hover:text-primary"
-          }`}
-        >
-          <Heart className="w-5 h-5" />
-          <span className="text-xs">Home</span>
-        </button>
-        <button 
           onClick={() => navigate("/appointments")}
           className={`flex flex-col items-center justify-center gap-1 px-3 py-2 transition-colors ${
             isActive("/appointments") ? "text-primary" : "text-muted-foreground hover:text-primary"
@@ -36,6 +27,15 @@ export function BottomNav() {
         >
           <Pill className="w-5 h-5" />
           <span className="text-xs">Meds</span>
+        </button>
+        <button 
+          onClick={() => navigate("/")}
+          className={`flex flex-col items-center justify-center gap-1 px-3 py-2 transition-colors ${
+            isActive("/") ? "text-primary" : "text-muted-foreground hover:text-primary"
+          }`}
+        >
+          <Heart className="w-5 h-5" />
+          <span className="text-xs">Home</span>
         </button>
         <button 
           onClick={() => navigate("/dietary")}

@@ -15,7 +15,7 @@ export function PageHeader({ currentDate }: PageHeaderProps) {
       month: 'long', 
       day: 'numeric' 
     };
-    return now.toLocaleDateString('en-US', options).toLowerCase();
+    return now.toLocaleDateString('en-US', options);
   };
 
   return (

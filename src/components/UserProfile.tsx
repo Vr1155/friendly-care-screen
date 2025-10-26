@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User, LogOut, Settings } from "lucide-react";
+import { User, LogOut, Settings, UserPlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 
@@ -94,6 +94,10 @@ export function UserProfile() {
         <DropdownMenuItem onClick={() => navigate("/profile")}>
           <User className="mr-2 h-4 w-4" />
           <span>Profile</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <UserPlus className="mr-2 h-4 w-4" />
+          <span>Add Caregiver</span>
         </DropdownMenuItem>
         <DropdownMenuItem>
           <Settings className="mr-2 h-4 w-4" />

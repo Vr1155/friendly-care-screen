@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Send, Bot, User } from "lucide-react";
+import { Send, Bot, User, Mic } from "lucide-react";
 
 interface Message {
   role: "user" | "assistant";
@@ -144,6 +144,13 @@ const ChatInterface = () => {
                   placeholder="Ask about symptoms, medications, or wellness tips..."
                   className="bg-background border-border focus-visible:ring-primary"
                 />
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="flex-shrink-0"
+                >
+                  <Mic className="w-4 h-4" />
+                </Button>
                 <Button
                   onClick={handleSend}
                   variant="default"
