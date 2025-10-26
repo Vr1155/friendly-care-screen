@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Send, Bot, User, Mic } from "lucide-react";
+import { Send, Bot, User, Mic, Square, Volume2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { AudioRecorder } from "@/utils/AudioRecorder";
 
 interface Message {
   role: "user" | "assistant";
@@ -17,8 +20,147 @@ const ChatInterface = () => {
     },
   ]);
   const [input, setInput] = useState("");
-
   const [isLoading, setIsLoading] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRecorderRef = useRef<AudioRecorder | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    audioRecorderRef.current = new AudioRecorder();
+    audioRef.current = new Audio();
+    
+    return () => {
+      audioRef.current = null;
+    };
+  }, []);
+
+  const handleVoiceToggle = async () => {
+    if (isRecording) {
+      // Stop recording
+      try {
+        setIsRecording(false);
+        const audioData = await audioRecorderRef.current?.stop();
+        
+        if (!audioData) return;
+
+        setIsLoading(true);
+
+        // Transcribe audio
+        const { data: transcriptionData, error: transcriptionError } = await supabase.functions.invoke('speech-to-text', {
+          body: { audioData }
+        });
+
+        if (transcriptionError) throw transcriptionError;
+
+        const transcribedText = transcriptionData.text;
+        
+        // Add user message
+        const userMessage: Message = { role: "user", content: transcribedText };
+        setMessages(prev => [...prev, userMessage]);
+
+        // Get AI response
+        const response = await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            },
+            body: JSON.stringify({
+              messages: [...messages, userMessage],
+            }),
+          }
+        );
+
+        if (!response.ok || !response.body) {
+          throw new Error("Failed to get response from AI");
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let assistantContent = "";
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value);
+          const lines = chunk.split("\n");
+
+          for (const line of lines) {
+            if (line.startsWith("data: ")) {
+              const data = line.slice(6);
+              if (data === "[DONE]") continue;
+
+              try {
+                const parsed = JSON.parse(data);
+                const content = parsed.choices?.[0]?.delta?.content;
+                if (content) {
+                  assistantContent += content;
+                  setMessages((prev) => {
+                    const lastMessage = prev[prev.length - 1];
+                    if (lastMessage?.role === "assistant") {
+                      return [
+                        ...prev.slice(0, -1),
+                        { role: "assistant", content: assistantContent },
+                      ];
+                    }
+                    return [...prev, { role: "assistant", content: assistantContent }];
+                  });
+                }
+              } catch (e) {
+                // Skip invalid JSON
+              }
+            }
+          }
+        }
+
+        // Convert response to speech
+        const { data: ttsData, error: ttsError } = await supabase.functions.invoke('text-to-speech', {
+          body: { text: assistantContent }
+        });
+
+        if (ttsError) throw ttsError;
+
+        // Play audio
+        if (audioRef.current && ttsData.audioData) {
+          setIsPlaying(true);
+          audioRef.current.src = `data:audio/mpeg;base64,${ttsData.audioData}`;
+          audioRef.current.onended = () => setIsPlaying(false);
+          await audioRef.current.play();
+        }
+
+      } catch (error: any) {
+        console.error("Error in voice flow:", error);
+        toast({
+          title: "Error",
+          description: error.message || "Failed to process voice input",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      // Start recording
+      try {
+        await audioRecorderRef.current?.start();
+        setIsRecording(true);
+        toast({
+          title: "Listening",
+          description: "Speak now... Tap again to stop",
+        });
+      } catch (error: any) {
+        toast({
+          title: "Microphone Access Required",
+          description: "Please grant microphone permissions to use voice features",
+          variant: "destructive",
+        });
+      }
+    }
+  };
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
@@ -143,24 +285,41 @@ const ChatInterface = () => {
                   onKeyPress={(e) => e.key === "Enter" && handleSend()}
                   placeholder="Ask about symptoms, medications, or wellness tips..."
                   className="bg-background border-border focus-visible:ring-primary"
+                  disabled={isLoading || isRecording}
                 />
                 <Button
-                  variant="outline"
+                  variant={isRecording ? "destructive" : "outline"}
                   size="icon"
-                  className="flex-shrink-0"
+                  className={`flex-shrink-0 ${isRecording ? 'animate-pulse' : ''}`}
+                  onClick={handleVoiceToggle}
+                  disabled={isLoading}
                 >
-                  <Mic className="w-4 h-4" />
+                  {isRecording ? <Square className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
                 </Button>
                 <Button
                   onClick={handleSend}
                   variant="default"
                   size="icon"
                   className="flex-shrink-0"
-                  disabled={isLoading}
+                  disabled={isLoading || isRecording}
                 >
                   <Send className="w-4 h-4" />
                 </Button>
               </div>
+              {isRecording && (
+                <p className="text-xs text-primary mt-2 text-center animate-pulse">
+                  🎤 Listening... Tap mic again to stop
+                </p>
+              )}
+              {isPlaying && (
+                <p className="text-xs text-primary mt-2 text-center flex items-center justify-center gap-1">
+                  <Volume2 className="w-3 h-3" />
+                  Playing response...
+                </p>
+              )}
+              <p className="text-xs text-muted-foreground mt-2 text-center">
+                Your voice stays private and secure
+              </p>
             </div>
           </div>
         </Card>
