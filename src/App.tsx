@@ -10,6 +10,7 @@ import Schedule from "./pages/Schedule";
 import CheckIn from "./pages/CheckIn";
 import UploadReports from "./pages/UploadReports";
 import UploadPrescriptions from "./pages/UploadPrescriptions";
+import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const App = () => (
                   <Route path="/check-in" element={<CheckIn />} />
                   <Route path="/upload-reports" element={<UploadReports />} />
                   <Route path="/upload-prescriptions" element={<UploadPrescriptions />} />
+                  <Route path="/auth" element={<Auth />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
