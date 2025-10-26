@@ -1,4 +1,4 @@
-import { Calendar, FileText, Upload, Pill, Home, LogOut, Stethoscope } from "lucide-react";
+import { Calendar, FileText, Upload, Pill, Home, LogOut, Stethoscope, CalendarCheck } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -18,6 +18,7 @@ import {
 const menuItems = [
   { title: "Home", url: "/", icon: Home },
   { title: "Your Doctors", url: "/your-doctors", icon: Stethoscope },
+  { title: "Upcoming Appointments", url: "/upcoming-appointments", icon: CalendarCheck },
   { title: "Schedule Doctor Appointment", url: "/schedule", icon: Calendar },
   { title: "Check-in Reports", url: "/check-in", icon: FileText },
   { title: "Upload Reports", url: "/upload-reports", icon: Upload },

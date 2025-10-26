@@ -8,6 +8,7 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import YourDoctors from "./pages/YourDoctors";
+import UpcomingAppointments from "./pages/UpcomingAppointments";
 import Schedule from "./pages/Schedule";
 import CheckIn from "./pages/CheckIn";
 import UploadReports from "./pages/UploadReports";
@@ -41,6 +42,7 @@ const App = () => (
                         <Routes>
                           <Route path="/" element={<Index />} />
                           <Route path="/your-doctors" element={<YourDoctors />} />
+                          <Route path="/upcoming-appointments" element={<UpcomingAppointments />} />
                           <Route path="/schedule" element={<Schedule />} />
                           <Route path="/check-in" element={<CheckIn />} />
                           <Route path="/upload-reports" element={<UploadReports />} />
