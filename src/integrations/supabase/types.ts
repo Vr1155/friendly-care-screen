@@ -55,6 +55,48 @@ export type Database = {
           },
         ]
       }
+      caregivers: {
+        Row: {
+          contact: string
+          created_at: string
+          email: string | null
+          first_name: string
+          id: string
+          is_primary: boolean | null
+          last_name: string
+          photo_url: string | null
+          relationship: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          contact: string
+          created_at?: string
+          email?: string | null
+          first_name: string
+          id?: string
+          is_primary?: boolean | null
+          last_name: string
+          photo_url?: string | null
+          relationship: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          contact?: string
+          created_at?: string
+          email?: string | null
+          first_name?: string
+          id?: string
+          is_primary?: boolean | null
+          last_name?: string
+          photo_url?: string | null
+          relationship?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       doctors: {
         Row: {
           address: string

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Check, AlertCircle, MessageCircle, Calendar, Pill } from "lucide-react";
+import { Check, AlertCircle, MessageCircle, Calendar, Pill, UserPlus } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -121,7 +121,7 @@ const Index = () => {
         </CardContent>
       </Card>
 
-      {/* Two Column Layout for Upcoming & Caregiver/Diet */}
+      {/* Two Column Layout for Upcoming & Caregiver */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Upcoming Items Section */}
         <div className="lg:col-span-2 space-y-4">
@@ -153,7 +153,7 @@ const Index = () => {
           </Card>
         </div>
 
-        {/* Right Column - Caregiver & Diet Cards */}
+        {/* Right Column - Caregiver Card */}
         <div className="space-y-4">
           {/* Caregiver Reassurance Card */}
           <Card className="shadow-[var(--shadow-soft)]">
@@ -178,6 +178,54 @@ const Index = () => {
               <Button variant="default" className="w-full" size="lg">
                 Share this week's progress
               </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      {/* Your Doctors Section */}
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold text-foreground">Your Doctors</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <Card 
+            className="shadow-[var(--shadow-soft)] cursor-pointer hover:bg-accent/50 transition-colors"
+            onClick={() => navigate("/your-doctors")}
+          >
+            <CardContent className="p-6 flex flex-col items-center text-center gap-3">
+              <Avatar className="w-20 h-20">
+                <AvatarImage src="/images/dr-elephant.png" />
+                <AvatarFallback className="bg-primary/10 text-primary text-xl">ES</AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="font-semibold text-foreground">Dr. Elephant Smith</p>
+                <p className="text-sm text-muted-foreground">Cardiologist</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card 
+            className="shadow-[var(--shadow-soft)] cursor-pointer hover:bg-accent/50 transition-colors"
+            onClick={() => navigate("/your-doctors")}
+          >
+            <CardContent className="p-6 flex flex-col items-center text-center gap-3">
+              <Avatar className="w-20 h-20">
+                <AvatarImage src="/images/dr-rabbit.png" />
+                <AvatarFallback className="bg-primary/10 text-primary text-xl">RJ</AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="font-semibold text-foreground">Dr. Rabbit Jones</p>
+                <p className="text-sm text-muted-foreground">Primary Care</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card 
+            className="shadow-[var(--shadow-soft)] border-dashed border-2 cursor-pointer hover:bg-accent/50 transition-colors"
+            onClick={() => navigate("/your-doctors")}
+          >
+            <CardContent className="p-6 flex flex-col items-center justify-center text-center gap-3 h-full">
+              <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
+                <UserPlus className="w-10 h-10 text-primary" />
+              </div>
+              <p className="font-medium text-foreground">Add Doctor</p>
             </CardContent>
           </Card>
         </div>

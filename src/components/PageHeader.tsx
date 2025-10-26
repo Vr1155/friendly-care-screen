@@ -1,6 +1,6 @@
-import { Heart } from "lucide-react";
 import { Notifications } from "@/components/Notifications";
 import { UserProfile } from "@/components/UserProfile";
+import medguardLogo from "@/assets/medguard-logo.jpg";
 
 interface PageHeaderProps {
   currentDate?: string;
@@ -21,9 +21,7 @@ export function PageHeader({ currentDate }: PageHeaderProps) {
   return (
     <header className="flex items-center justify-between p-4 border-b bg-background sticky top-0 z-10">
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
-          <Heart className="w-6 h-6 text-primary-foreground" />
-        </div>
+        <img src={medguardLogo} alt="MedGuard" className="w-10 h-10 rounded-lg object-cover" />
         <span className="text-xl font-semibold text-foreground">MedGuard</span>
       </div>
       <p className="text-base text-muted-foreground hidden md:block">{getDate()}</p>
