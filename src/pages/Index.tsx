@@ -24,6 +24,17 @@ interface Doctor {
   photo_url?: string;
 }
 
+interface Caregiver {
+  id: string;
+  first_name: string;
+  last_name: string;
+  relationship: string;
+  contact: string;
+  email?: string;
+  photo_url?: string;
+  is_primary: boolean;
+}
+
 const Index = () => {
   const navigate = useNavigate();
   const [userName, setUserName] = useState("there");
@@ -31,6 +42,7 @@ const Index = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isAddDoctorOpen, setIsAddDoctorOpen] = useState(false);
   const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [caregivers, setCaregivers] = useState<Caregiver[]>([]);
   const [doctorForm, setDoctorForm] = useState({
     first_name: "",
     last_name: "",
@@ -44,6 +56,7 @@ const Index = () => {
     fetchUserProfile();
     updateDate();
     fetchDoctors();
+    fetchCaregivers();
   }, []);
 
   const fetchUserProfile = async () => {
@@ -90,6 +103,24 @@ const Index = () => {
       setDoctors(data || []);
     } catch (error: any) {
       console.error("Error fetching doctors:", error);
+    }
+  };
+
+  const fetchCaregivers = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from("caregivers")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("is_primary", { ascending: false });
+
+      if (error) throw error;
+      setCaregivers(data || []);
+    } catch (error: any) {
+      console.error("Error fetching caregivers:", error);
     }
   };
 
@@ -256,23 +287,48 @@ const Index = () => {
               <CardTitle className="text-lg">Caregiver</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="flex items-center gap-3">
-                <Avatar className="w-12 h-12">
-                  <AvatarImage src="" />
-                  <AvatarFallback className="bg-primary/10 text-primary">JD</AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="font-medium text-foreground">Jane Doe</p>
-                  <p className="text-sm text-muted-foreground">Primary Caregiver</p>
-                </div>
-              </div>
-              <Badge variant="secondary" className="w-full justify-center py-2">
-                <Check className="w-4 h-4 mr-1" />
-                No alerts, everything looks good
-              </Badge>
-              <Button variant="default" className="w-full" size="lg">
-                Share this week's progress
-              </Button>
+              {caregivers.length > 0 ? (
+                <>
+                  <div className="flex items-center gap-3">
+                    <Avatar className="w-12 h-12">
+                      <AvatarImage src={caregivers[0].photo_url} />
+                      <AvatarFallback className="bg-primary/10 text-primary">
+                        {caregivers[0].first_name[0]}{caregivers[0].last_name[0]}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="font-medium text-foreground">
+                        {caregivers[0].first_name} {caregivers[0].last_name}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {caregivers[0].is_primary ? "Primary Caregiver" : caregivers[0].relationship}
+                      </p>
+                    </div>
+                  </div>
+                  <Badge variant="secondary" className="w-full justify-center py-2">
+                    <Check className="w-4 h-4 mr-1" />
+                    No alerts, everything looks good
+                  </Badge>
+                  <Button variant="default" className="w-full" size="lg">
+                    Share this week's progress
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <p className="text-sm text-muted-foreground text-center py-4">
+                    No caregivers added yet
+                  </p>
+                  <Button 
+                    variant="default" 
+                    className="w-full" 
+                    size="lg"
+                    onClick={() => navigate("/caregivers")}
+                  >
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    Add Caregiver
+                  </Button>
+                </>
+              )}
             </CardContent>
           </Card>
         </div>
