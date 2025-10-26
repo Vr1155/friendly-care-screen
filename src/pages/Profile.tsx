@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { User, Upload, Loader2 } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
 
 export default function Profile() {
   const [loading, setLoading] = useState(true);
@@ -153,7 +154,9 @@ export default function Profile() {
   }
 
   return (
-    <div className="container mx-auto p-6 max-w-2xl">
+    <>
+      <PageHeader />
+      <div className="container mx-auto p-6 max-w-2xl">
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-foreground">Your Profile</h1>
         <p className="text-muted-foreground mt-2">Manage your personal information</p>
@@ -236,6 +239,7 @@ export default function Profile() {
           </form>
         </CardContent>
       </Card>
-    </div>
+      </div>
+    </>
   );
 }

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, User, Phone, MapPin, Trash2, Calendar } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
 
 interface Doctor {
   id: string;
@@ -165,7 +166,9 @@ export default function YourDoctors() {
   }
 
   return (
-    <div className="container mx-auto p-6">
+    <>
+      <PageHeader />
+      <div className="container mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Doctors</h1>
@@ -312,6 +315,7 @@ export default function YourDoctors() {
           </DialogContent>
         </Dialog>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

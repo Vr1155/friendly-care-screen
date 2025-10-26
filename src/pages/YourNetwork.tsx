@@ -1,6 +1,7 @@
 import { MapPin, Building2, Stethoscope, CheckCircle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { PageHeader } from "@/components/PageHeader";
 import mapPlaceholder from "@/assets/network-map-placeholder.jpg";
 
 const providers = [
@@ -29,7 +30,9 @@ const providers = [
 
 const YourNetwork = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 p-6">
+    <>
+      <PageHeader />
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 p-6">
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Header */}
         <div className="space-y-2">
@@ -88,7 +91,8 @@ const YourNetwork = () => {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

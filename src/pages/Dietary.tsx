@@ -1,6 +1,7 @@
 import { Utensils, Apple, Beef, Milk, Wheat } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { PageHeader } from "@/components/PageHeader";
 
 const dietaryRecommendations = [
   {
@@ -63,7 +64,9 @@ const foodsToLimit = [
 
 const Dietary = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 p-6">
+    <>
+      <PageHeader />
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 p-6">
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Header */}
         <div className="space-y-2">
@@ -146,7 +149,8 @@ const Dietary = () => {
           </CardContent>
         </Card>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

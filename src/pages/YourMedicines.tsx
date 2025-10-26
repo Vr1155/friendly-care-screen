@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { PageHeader } from "@/components/PageHeader";
 
 const medicines = [
   { name: "Atorbin", dosage: "20mg", frequency: "1/day", tag: "cholesterol control" },
@@ -58,7 +59,9 @@ export default function YourMedicines() {
     : medicines.filter(medicine => medicine.tag === selectedFilter);
 
   return (
-    <div className="container mx-auto p-6 max-w-4xl">
+    <>
+      <PageHeader />
+      <div className="container mx-auto p-6 max-w-4xl">
       <div className="mb-8 flex items-start justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-foreground flex items-center gap-3 mb-2">
@@ -275,6 +278,7 @@ export default function YourMedicines() {
         </Dialog>
 
       </Tabs>
-    </div>
+      </div>
+    </>
   );
 }

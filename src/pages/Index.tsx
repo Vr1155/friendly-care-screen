@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Bell, Check, Pill, AlertCircle, MessageCircle, Calendar, Heart, Upload } from "lucide-react";
+import { Check, Pill, AlertCircle, MessageCircle, Calendar, Heart, Upload } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Notifications } from "@/components/Notifications";
-import { UserProfile } from "@/components/UserProfile";
+import { PageHeader } from "@/components/PageHeader";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -57,31 +56,15 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-6 space-y-6">
-      {/* Top Header */}
-      <header className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
-            <Heart className="w-6 h-6 text-primary-foreground" />
-          </div>
-          <span className="text-xl font-semibold text-foreground">MedGuard</span>
+    <>
+      <PageHeader currentDate={currentDate} />
+      <div className="min-h-screen bg-background p-4 md:p-6 space-y-6">
+        {/* Greeting Hero */}
+        <div className="text-center py-4">
+          <h1 className="text-2xl md:text-3xl font-medium text-foreground">
+            {getGreeting()}, {userName}, you're taking great care of yourself today.
+          </h1>
         </div>
-        <p className="text-base text-muted-foreground hidden md:block">{currentDate}</p>
-        <div className="flex items-center gap-3">
-          <Notifications />
-          <UserProfile />
-        </div>
-      </header>
-
-      {/* Mobile Date */}
-      <p className="text-sm text-muted-foreground md:hidden text-center">{currentDate}</p>
-
-      {/* Greeting Hero */}
-      <div className="text-center py-4">
-        <h1 className="text-2xl md:text-3xl font-medium text-foreground">
-          {getGreeting()}, {userName}, you're taking great care of yourself today.
-        </h1>
-      </div>
 
       {/* Key Health Snapshot Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -180,7 +163,7 @@ const Index = () => {
                 onClick={() => navigate("/appointments")}
               >
                 <Calendar className="w-5 h-5 text-primary flex-shrink-0" />
-                <span className="text-base text-foreground">Tomorrow 11:30 am — cardiologist appointment</span>
+                <span className="text-base text-foreground">Monday Oct 27, 11:00 am — Dr Elephant Smith appointment</span>
               </button>
               <button 
                 className="w-full text-left p-3 rounded-lg hover:bg-accent transition-colors flex items-center gap-3"
@@ -244,51 +227,8 @@ const Index = () => {
           </Card>
         </div>
       </div>
-
-      {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border shadow-[var(--shadow-soft)] z-50">
-        <div className="flex justify-around items-center h-16 max-w-2xl mx-auto">
-          <button 
-            onClick={() => navigate("/")}
-            className="flex flex-col items-center justify-center gap-1 px-3 py-2 text-primary"
-          >
-            <Heart className="w-5 h-5" />
-            <span className="text-xs">Home</span>
-          </button>
-          <button 
-            onClick={() => navigate("/appointments")}
-            className="flex flex-col items-center justify-center gap-1 px-3 py-2 text-muted-foreground hover:text-primary transition-colors"
-          >
-            <Calendar className="w-5 h-5" />
-            <span className="text-xs">Appointments</span>
-          </button>
-          <button 
-            onClick={() => navigate("/your-medicines")}
-            className="flex flex-col items-center justify-center gap-1 px-3 py-2 text-muted-foreground hover:text-primary transition-colors"
-          >
-            <Pill className="w-5 h-5" />
-            <span className="text-xs">Meds</span>
-          </button>
-          <button 
-            onClick={() => navigate("/dietary")}
-            className="flex flex-col items-center justify-center gap-1 px-3 py-2 text-muted-foreground hover:text-primary transition-colors"
-          >
-            <Heart className="w-5 h-5" />
-            <span className="text-xs">Dietary</span>
-          </button>
-          <button 
-            onClick={() => navigate("/your-network")}
-            className="flex flex-col items-center justify-center gap-1 px-3 py-2 text-muted-foreground hover:text-primary transition-colors"
-          >
-            <Heart className="w-5 h-5" />
-            <span className="text-xs">Coverage</span>
-          </button>
-        </div>
-      </nav>
-
-      {/* Bottom Padding to prevent content from being hidden behind nav */}
-      <div className="h-20"></div>
-    </div>
+      </div>
+    </>
   );
 };
 
