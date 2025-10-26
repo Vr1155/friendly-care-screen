@@ -231,8 +231,8 @@ const Index = () => {
           size="lg" 
           className="h-20 text-lg flex flex-col gap-2"
         >
-          <MessageCircle className="w-6 h-6" />
-          <span>Ask Caregiver</span>
+          <Phone className="w-6 h-6" />
+          <span>Call Caregiver</span>
         </Button>
       </div>
 
