@@ -27,14 +27,14 @@ serve(async (req) => {
         "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
         "Content-Type": "application/json",
         "HTTP-Referer": `${Deno.env.get("SUPABASE_URL")}`,
-        "X-Title": "MedGuard Buffalo AI Assistant",
+        "X-Title": "MedGuard AI Assistant",
       },
       body: JSON.stringify({
         model: "meta-llama/llama-4-scout:free",
         messages: [
           {
             role: "system",
-            content: "You are an AI MedGuard Buffalo assistant. You help with health questions, symptom information, and wellness advice. Always remind users that you're not a replacement for professional medical advice."
+            content: "You are an AI MedGuard assistant. You help with health questions, symptom information, and wellness advice. Always remind users that you're not a replacement for professional medical advice."
           },
           ...messages
         ],
