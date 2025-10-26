@@ -1,12 +1,8 @@
-import Hero from "@/components/Hero";
 import ChatInterface from "@/components/ChatInterface";
-import Features from "@/components/Features";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
-      <Hero />
-      <Features />
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
       <ChatInterface />
     </div>
   );
