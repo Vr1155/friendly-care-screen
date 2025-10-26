@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pill, Upload } from "lucide-react";
+import { Pill, Upload, FileText, Image as ImageIcon } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -24,6 +24,19 @@ const conflicts = [
   {
     title: "Neurocil + Flexorin",
     message: "May cause excessive dizziness",
+  },
+];
+
+const prescriptionFiles = [
+  {
+    filename: "prescription_oct_2025.pdf",
+    type: "pdf",
+    uploadDate: "Oct 20, 2025",
+  },
+  {
+    filename: "rx_dr_smith_heart.png",
+    type: "image",
+    uploadDate: "Oct 20, 2025",
   },
 ];
 
@@ -102,9 +115,12 @@ export default function YourMedicines() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-2 mb-8 h-14">
+        <TabsList className="grid w-full grid-cols-3 mb-8 h-14">
           <TabsTrigger value="medicines" className="text-lg">
             Medicines
+          </TabsTrigger>
+          <TabsTrigger value="prescriptions" className="text-lg">
+            Prescriptions
           </TabsTrigger>
           <TabsTrigger value="alerts" className="text-lg">
             Conflicts
@@ -141,6 +157,43 @@ export default function YourMedicines() {
           >
             Check Conflicts
           </Button>
+        </TabsContent>
+
+        <TabsContent value="prescriptions" className="space-y-6">
+          <div className="mb-6">
+            <h2 className="text-3xl font-bold text-foreground mb-2">
+              Your Prescriptions
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Files uploaded from your doctor visits
+            </p>
+          </div>
+
+          <div className="grid gap-6">
+            {prescriptionFiles.map((file, index) => (
+              <Card key={index} className="hover:shadow-lg transition-shadow">
+                <CardHeader className="pb-4">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 rounded-full bg-primary/10">
+                      {file.type === "pdf" ? (
+                        <FileText className="h-8 w-8 text-primary" />
+                      ) : (
+                        <ImageIcon className="h-8 w-8 text-primary" />
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <CardTitle className="text-2xl mb-2">
+                        {file.filename}
+                      </CardTitle>
+                      <CardDescription className="text-lg">
+                        Uploaded on {file.uploadDate}
+                      </CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+              </Card>
+            ))}
+          </div>
         </TabsContent>
 
         <TabsContent value="alerts" className="space-y-6">
