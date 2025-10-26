@@ -6,7 +6,6 @@ import { Send, Bot, User, Mic, Square, Volume2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { AudioRecorder } from "@/utils/AudioRecorder";
-import DraggableWidget from "@/components/DraggableWidget";
 
 interface Message {
   role: "user" | "assistant";
@@ -245,9 +244,17 @@ const ChatInterface = () => {
   return (
     <section className="py-20 px-4" id="chat">
       <div className="container mx-auto max-w-4xl relative">
-        <DraggableWidget>
-          <div dangerouslySetInnerHTML={{ __html: '<elevenlabs-convai agent-id="agent_1701k8gg4jcefj686sc6ce9rm61a"></elevenlabs-convai>' }} />
-        </DraggableWidget>
+        <style>{`
+          elevenlabs-convai {
+            position: fixed !important;
+            left: 24px !important;
+            top: 100px !important;
+            right: auto !important;
+            bottom: auto !important;
+            z-index: 50 !important;
+          }
+        `}</style>
+        <div dangerouslySetInnerHTML={{ __html: '<elevenlabs-convai agent-id="agent_1701k8gg4jcefj686sc6ce9rm61a"></elevenlabs-convai>' }} />
         
         <Card className="bg-[var(--gradient-card)] shadow-[var(--shadow-soft)] border-border/50">
           <div className="h-[500px] flex flex-col">
