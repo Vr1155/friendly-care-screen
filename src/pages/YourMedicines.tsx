@@ -59,59 +59,58 @@ export default function YourMedicines() {
     <div className="container mx-auto p-6 max-w-4xl">
       <div className="mb-8 flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-bold text-foreground flex items-center gap-3 mb-2">
-            <Pill className="h-10 w-10 text-primary" />
+          <h1 className="text-3xl font-bold text-foreground flex items-center gap-3 mb-2">
+            <Pill className="h-8 w-8 text-primary" />
             Your Medicines
           </h1>
-          <p className="text-xl text-muted-foreground">
+          <p className="text-base text-muted-foreground">
             Extracted from your prescriptions
           </p>
         </div>
         
         <Dialog>
           <DialogTrigger asChild>
-            <Button size="lg" className="text-lg px-6">
+            <Button size="lg">
               <Upload className="h-5 w-5 mr-2" />
               Upload Prescription
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle className="flex items-center gap-2 text-2xl">
+              <DialogTitle className="flex items-center gap-2 text-xl">
                 <Pill className="h-6 w-6 text-primary" />
                 Upload Prescription
               </DialogTitle>
             </DialogHeader>
             <div className="space-y-4 pt-4">
               <div className="space-y-2">
-                <Label htmlFor="doctor-name" className="text-base">Doctor's Name</Label>
-                <Input id="doctor-name" placeholder="Enter doctor's name" className="text-lg py-5" />
+                <Label htmlFor="doctor-name">Doctor's Name</Label>
+                <Input id="doctor-name" placeholder="Enter doctor's name" />
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="prescription-date" className="text-base">Prescription Date</Label>
-                <Input id="prescription-date" type="date" className="text-lg py-5" />
+                <Label htmlFor="prescription-date">Prescription Date</Label>
+                <Input id="prescription-date" type="date" />
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="medication" className="text-base">Medication Details</Label>
+                <Label htmlFor="medication">Medication Details</Label>
                 <Textarea 
                   id="medication" 
                   placeholder="Enter medication names, dosage, and instructions"
                   rows={4}
-                  className="text-lg"
                 />
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="prescription-file" className="text-base">Upload Prescription Image</Label>
+                <Label htmlFor="prescription-file">Upload Prescription Image</Label>
                 <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary/50 transition-colors">
-                  <Upload className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-base text-muted-foreground mb-2">
+                  <Upload className="h-8 w-8 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-sm text-muted-foreground mb-2">
                     Drag and drop your prescription file here, or click to browse
                   </p>
                   <Input id="prescription-file" type="file" className="hidden" accept="image/*,.pdf" />
-                  <Button variant="outline" size="lg" onClick={() => document.getElementById('prescription-file')?.click()}>
+                  <Button variant="outline" onClick={() => document.getElementById('prescription-file')?.click()}>
                     Choose File
                   </Button>
                 </div>
@@ -127,30 +126,30 @@ export default function YourMedicines() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3 mb-8 h-14">
-          <TabsTrigger value="medicines" className="text-lg">
+        <TabsList className="grid w-full grid-cols-3 mb-8">
+          <TabsTrigger value="medicines">
             Medicines
           </TabsTrigger>
-          <TabsTrigger value="prescriptions" className="text-lg">
+          <TabsTrigger value="prescriptions">
             Prescriptions
           </TabsTrigger>
-          <TabsTrigger value="alerts" className="text-lg">
+          <TabsTrigger value="alerts">
             Conflicts
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="medicines" className="space-y-6">
           <div className="flex items-center gap-3 mb-6">
-            <Label htmlFor="filter-select" className="text-lg font-medium whitespace-nowrap">
+            <Label htmlFor="filter-select" className="font-medium whitespace-nowrap">
               Filter by:
             </Label>
             <Select value={selectedFilter} onValueChange={setSelectedFilter}>
-              <SelectTrigger id="filter-select" className="w-64 text-lg h-12 bg-background">
+              <SelectTrigger id="filter-select" className="w-64 bg-background">
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
               <SelectContent className="bg-background z-50">
                 {filterTags.map((tag) => (
-                  <SelectItem key={tag} value={tag} className="text-lg capitalize cursor-pointer">
+                  <SelectItem key={tag} value={tag} className="capitalize cursor-pointer">
                     {tag}
                   </SelectItem>
                 ))}
@@ -164,16 +163,16 @@ export default function YourMedicines() {
                 <CardHeader className="pb-4">
                   <div className="flex items-start gap-4">
                     <div className="p-3 rounded-full bg-primary/10">
-                      <Pill className="h-8 w-8 text-primary" />
+                      <Pill className="h-6 w-6 text-primary" />
                     </div>
                     <div className="flex-1">
-                      <CardTitle className="text-2xl mb-2">
+                      <CardTitle className="text-xl mb-2">
                         {medicine.name} {medicine.dosage}
                       </CardTitle>
-                      <CardDescription className="text-lg mb-2">
+                      <CardDescription className="text-base mb-2">
                         {medicine.frequency}
                       </CardDescription>
-                      <Badge className="bg-yellow-500 text-black hover:bg-yellow-600 text-base capitalize">
+                      <Badge className="bg-yellow-500 text-black hover:bg-yellow-600 text-sm capitalize">
                         {medicine.tag}
                       </Badge>
                     </div>
@@ -185,7 +184,7 @@ export default function YourMedicines() {
 
           <Button
             size="lg"
-            className="w-full text-lg py-6 mt-8"
+            className="w-full mt-8"
             onClick={() => setActiveTab("alerts")}
           >
             Check Conflicts
@@ -194,10 +193,10 @@ export default function YourMedicines() {
 
         <TabsContent value="prescriptions" className="space-y-6">
           <div className="mb-6">
-            <h2 className="text-3xl font-bold text-foreground mb-2">
+            <h2 className="text-2xl font-bold text-foreground mb-2">
               Your Prescriptions
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-base text-muted-foreground">
               Files uploaded from your doctor visits
             </p>
           </div>
@@ -213,16 +212,16 @@ export default function YourMedicines() {
                   <div className="flex items-start gap-4">
                     <div className="p-3 rounded-full bg-primary/10">
                       {file.type === "pdf" ? (
-                        <FileText className="h-8 w-8 text-primary" />
+                        <FileText className="h-6 w-6 text-primary" />
                       ) : (
-                        <ImageIcon className="h-8 w-8 text-primary" />
+                        <ImageIcon className="h-6 w-6 text-primary" />
                       )}
                     </div>
                     <div className="flex-1">
-                      <CardTitle className="text-2xl mb-2">
+                      <CardTitle className="text-xl mb-2">
                         {file.filename}
                       </CardTitle>
-                      <CardDescription className="text-lg">
+                      <CardDescription className="text-base">
                         Uploaded on {file.uploadDate}
                       </CardDescription>
                     </div>
@@ -236,7 +235,7 @@ export default function YourMedicines() {
         <Dialog open={!!previewFile} onOpenChange={() => setPreviewFile(null)}>
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle className="text-2xl">
+              <DialogTitle className="text-xl">
                 {previewFile?.filename}
               </DialogTitle>
             </DialogHeader>
@@ -260,10 +259,10 @@ export default function YourMedicines() {
 
         <TabsContent value="alerts" className="space-y-6">
           <div className="mb-6">
-            <h2 className="text-3xl font-bold text-destructive mb-2">
+            <h2 className="text-2xl font-bold text-destructive mb-2">
               Conflicts Detected
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-base text-muted-foreground">
               Please review these potential medication interactions
             </p>
           </div>
@@ -271,10 +270,10 @@ export default function YourMedicines() {
           <div className="space-y-6">
             {conflicts.map((conflict, index) => (
               <Alert key={index} variant="destructive" className="p-6">
-                <AlertTitle className="text-2xl font-semibold mb-3">
+                <AlertTitle className="text-xl font-semibold mb-3">
                   {conflict.title}
                 </AlertTitle>
-                <AlertDescription className="text-lg mb-4">
+                <AlertDescription className="text-base mb-4">
                   {conflict.message}
                 </AlertDescription>
               </Alert>
@@ -282,13 +281,13 @@ export default function YourMedicines() {
           </div>
 
           <div className="grid gap-4 mt-8">
-            <Button size="lg" className="w-full text-lg py-6">
+            <Button size="lg" className="w-full">
               Contact Doctor
             </Button>
             <Button
               size="lg"
               variant="outline"
-              className="w-full text-lg py-6"
+              className="w-full"
               onClick={() => setActiveTab("medicines")}
             >
               Mark as Acknowledged
