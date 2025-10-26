@@ -245,18 +245,7 @@ const ChatInterface = () => {
     <section className="py-20 px-4" id="chat">
       <div className="container mx-auto max-w-4xl relative">
         <Card className="bg-[var(--gradient-card)] shadow-[var(--shadow-soft)] border-border/50">
-          <div className="h-[500px] flex flex-col relative">
-            <style>{`
-              elevenlabs-convai {
-                position: absolute !important;
-                left: 16px !important;
-                top: 16px !important;
-                right: auto !important;
-                bottom: auto !important;
-                z-index: 10 !important;
-              }
-            `}</style>
-            <div dangerouslySetInnerHTML={{ __html: '<elevenlabs-convai agent-id="agent_1701k8gg4jcefj686sc6ce9rm61a"></elevenlabs-convai>' }} />
+          <div className="h-[500px] flex flex-col">
             <div className="flex-1 overflow-y-auto p-6 space-y-4">
               {messages.map((message, index) => (
                 <div

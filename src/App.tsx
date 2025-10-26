@@ -22,6 +22,17 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      <style>{`
+        elevenlabs-convai {
+          position: fixed !important;
+          left: 24px !important;
+          bottom: 24px !important;
+          right: auto !important;
+          top: auto !important;
+          z-index: 9999 !important;
+        }
+      `}</style>
+      <div dangerouslySetInnerHTML={{ __html: '<elevenlabs-convai agent-id="agent_1701k8gg4jcefj686sc6ce9rm61a"></elevenlabs-convai>' }} />
       <BrowserRouter>
         <Routes>
           <Route path="/auth" element={<Auth />} />
