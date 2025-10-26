@@ -12,6 +12,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ChatInterface from "@/components/ChatInterface";
 import { useToast } from "@/hooks/use-toast";
 
@@ -238,45 +239,54 @@ const Index = () => {
       {/* Daily Check-In Progress */}
       <div className="grid grid-cols-1 gap-4">
         <Card className="shadow-[var(--shadow-soft)]">
-          <CardHeader className="pb-3">
-            <div className="flex items-center justify-between">
+          <CardHeader className="pb-4">
+            <div className="flex items-center justify-between mb-4">
               <CardTitle className="text-xl">Daily Check-Ins</CardTitle>
               <span className="text-sm font-medium text-muted-foreground">
                 {completedCount}/{totalCount} completed — {completionPercentage}%
               </span>
             </div>
-            <Progress value={completionPercentage} className="mt-2" />
+            
+            <TooltipProvider>
+              <div className="space-y-3">
+                {/* Icons Row */}
+                <div className="flex items-center justify-between px-1">
+                  {checkIns.map((item) => {
+                    const ItemIcon = item.icon;
+                    return (
+                      <Tooltip key={item.id}>
+                        <TooltipTrigger asChild>
+                          <button
+                            onClick={() => toggleCheckIn(item.id)}
+                            className="flex flex-col items-center gap-1 hover:scale-110 transition-transform"
+                          >
+                            <div className={`w-10 h-10 flex items-center justify-center rounded-full transition-all ${
+                              item.completed ? 'bg-teal-600/10' : 'bg-muted'
+                            }`}>
+                              {item.completed ? (
+                                <Check className="w-6 h-6 text-teal-600 animate-scale-in" />
+                              ) : (
+                                <Circle className="w-5 h-5 text-muted-foreground" />
+                              )}
+                            </div>
+                            <ItemIcon className={`w-4 h-4 ${
+                              item.completed ? 'text-teal-600' : 'text-muted-foreground'
+                            }`} />
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>{item.label}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    );
+                  })}
+                </div>
+                
+                {/* Progress Bar */}
+                <Progress value={completionPercentage} className="h-2" />
+              </div>
+            </TooltipProvider>
           </CardHeader>
-          <CardContent className="space-y-2">
-            {checkIns.map((item) => {
-              const ItemIcon = item.icon;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => toggleCheckIn(item.id)}
-                  className="w-full text-left p-3 rounded-lg hover:bg-accent transition-colors flex items-center gap-3"
-                >
-                  <div className={`w-6 h-6 flex items-center justify-center flex-shrink-0 transition-all ${
-                    item.completed ? 'text-teal-600' : 'text-muted-foreground'
-                  }`}>
-                    {item.completed ? (
-                      <Check className="w-6 h-6 animate-scale-in" />
-                    ) : (
-                      <Circle className="w-6 h-6" />
-                    )}
-                  </div>
-                  <ItemIcon className={`w-5 h-5 flex-shrink-0 ${
-                    item.completed ? 'text-teal-600' : 'text-muted-foreground'
-                  }`} />
-                  <span className={`text-base ${
-                    item.completed ? 'text-foreground line-through' : 'text-foreground'
-                  }`}>
-                    {item.label}
-                  </span>
-                </button>
-              );
-            })}
-          </CardContent>
         </Card>
       </div>
 
