@@ -1,20 +1,33 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Check, AlertCircle, MessageCircle, Calendar, Pill, UserPlus } from "lucide-react";
+import { Check, AlertCircle, MessageCircle, Calendar, Pill, UserPlus, MoreVertical, Phone } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/PageHeader";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import ChatInterface from "@/components/ChatInterface";
+import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
   const navigate = useNavigate();
   const [userName, setUserName] = useState("there");
   const [currentDate, setCurrentDate] = useState("");
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isAddDoctorOpen, setIsAddDoctorOpen] = useState(false);
+  const [doctorForm, setDoctorForm] = useState({
+    first_name: "",
+    last_name: "",
+    doctor_type: "",
+    contact: "",
+    address: "",
+  });
+  const { toast } = useToast();
 
   useEffect(() => {
     fetchUserProfile();
@@ -53,9 +66,56 @@ const Index = () => {
 
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return "Good morning";
-    if (hour < 18) return "Good afternoon";
-    return "Good evening";
+    if (hour < 12) return "Good Morning";
+    if (hour < 18) return "Good Afternoon";
+    return "Good Evening";
+  };
+
+  const handleAddDoctor = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { error } = await supabase.from("doctors").insert({
+        ...doctorForm,
+        user_id: user.id,
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Doctor added successfully",
+      });
+
+      setIsAddDoctorOpen(false);
+      setDoctorForm({
+        first_name: "",
+        last_name: "",
+        doctor_type: "",
+        contact: "",
+        address: "",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleScheduleAppointment = (doctorName: string) => {
+    navigate("/appointments");
+  };
+
+  const handleCall = (contact: string, doctorName: string) => {
+    window.location.href = `tel:${contact}`;
+    toast({
+      title: "Calling",
+      description: `Calling ${doctorName}...`,
+    });
   };
 
   return (
@@ -187,10 +247,28 @@ const Index = () => {
       <div className="space-y-4">
         <h2 className="text-xl font-semibold text-foreground">Your Doctors</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <Card 
-            className="shadow-[var(--shadow-soft)] cursor-pointer hover:bg-accent/50 transition-colors"
-            onClick={() => navigate("/your-doctors")}
-          >
+          <Card className="shadow-[var(--shadow-soft)] relative">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="absolute top-2 right-2 h-8 w-8 z-10"
+                >
+                  <MoreVertical className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-background">
+                <DropdownMenuItem onClick={() => handleScheduleAppointment("Dr. Elephant Smith")}>
+                  <Calendar className="mr-2 h-4 w-4" />
+                  Schedule Appointment
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleCall("555-0123", "Dr. Elephant Smith")}>
+                  <Phone className="mr-2 h-4 w-4" />
+                  Call
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <CardContent className="p-6 flex flex-col items-center text-center gap-3">
               <Avatar className="w-20 h-20">
                 <AvatarImage src="/images/dr-elephant.png" />
@@ -202,10 +280,29 @@ const Index = () => {
               </div>
             </CardContent>
           </Card>
-          <Card 
-            className="shadow-[var(--shadow-soft)] cursor-pointer hover:bg-accent/50 transition-colors"
-            onClick={() => navigate("/your-doctors")}
-          >
+          
+          <Card className="shadow-[var(--shadow-soft)] relative">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="absolute top-2 right-2 h-8 w-8 z-10"
+                >
+                  <MoreVertical className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-background">
+                <DropdownMenuItem onClick={() => handleScheduleAppointment("Dr. Rabbit Jones")}>
+                  <Calendar className="mr-2 h-4 w-4" />
+                  Schedule Appointment
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleCall("555-0456", "Dr. Rabbit Jones")}>
+                  <Phone className="mr-2 h-4 w-4" />
+                  Call
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <CardContent className="p-6 flex flex-col items-center text-center gap-3">
               <Avatar className="w-20 h-20">
                 <AvatarImage src="/images/dr-rabbit.png" />
@@ -217,17 +314,76 @@ const Index = () => {
               </div>
             </CardContent>
           </Card>
-          <Card 
-            className="shadow-[var(--shadow-soft)] border-dashed border-2 cursor-pointer hover:bg-accent/50 transition-colors"
-            onClick={() => navigate("/your-doctors")}
-          >
-            <CardContent className="p-6 flex flex-col items-center justify-center text-center gap-3 h-full">
-              <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
-                <UserPlus className="w-10 h-10 text-primary" />
-              </div>
-              <p className="font-medium text-foreground">Add Doctor</p>
-            </CardContent>
-          </Card>
+
+          <Dialog open={isAddDoctorOpen} onOpenChange={setIsAddDoctorOpen}>
+            <DialogTrigger asChild>
+              <Card className="shadow-[var(--shadow-soft)] border-dashed border-2 cursor-pointer hover:bg-accent/50 transition-colors">
+                <CardContent className="p-6 flex flex-col items-center justify-center text-center gap-3 h-full">
+                  <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
+                    <UserPlus className="w-10 h-10 text-primary" />
+                  </div>
+                  <p className="font-medium text-foreground">Add Doctor</p>
+                </CardContent>
+              </Card>
+            </DialogTrigger>
+            <DialogContent className="max-w-md">
+              <DialogHeader>
+                <DialogTitle>Add New Doctor</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleAddDoctor} className="space-y-4">
+                <div>
+                  <Label htmlFor="first_name">First Name</Label>
+                  <Input
+                    id="first_name"
+                    value={doctorForm.first_name}
+                    onChange={(e) => setDoctorForm({ ...doctorForm, first_name: e.target.value })}
+                    required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="last_name">Last Name</Label>
+                  <Input
+                    id="last_name"
+                    value={doctorForm.last_name}
+                    onChange={(e) => setDoctorForm({ ...doctorForm, last_name: e.target.value })}
+                    required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="doctor_type">Specialty</Label>
+                  <Input
+                    id="doctor_type"
+                    placeholder="e.g., Cardiologist, Primary Care"
+                    value={doctorForm.doctor_type}
+                    onChange={(e) => setDoctorForm({ ...doctorForm, doctor_type: e.target.value })}
+                    required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="contact">Contact Number</Label>
+                  <Input
+                    id="contact"
+                    type="tel"
+                    value={doctorForm.contact}
+                    onChange={(e) => setDoctorForm({ ...doctorForm, contact: e.target.value })}
+                    required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="address">Address</Label>
+                  <Input
+                    id="address"
+                    value={doctorForm.address}
+                    onChange={(e) => setDoctorForm({ ...doctorForm, address: e.target.value })}
+                    required
+                  />
+                </div>
+                <Button type="submit" className="w-full">
+                  Add Doctor
+                </Button>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 

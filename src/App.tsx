@@ -6,7 +6,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { BottomNav } from "@/components/BottomNav";
 import Index from "./pages/Index";
-import YourDoctors from "./pages/YourDoctors";
 import Appointments from "./pages/Appointments";
 import YourMedicines from "./pages/YourMedicines";
 import Dietary from "./pages/Dietary";
@@ -33,7 +32,6 @@ const App = () => (
                 <div className="min-h-screen w-full pb-16">
                   <Routes>
                     <Route path="/" element={<Index />} />
-                    <Route path="/your-doctors" element={<YourDoctors />} />
                     <Route path="/appointments" element={<Appointments />} />
                     <Route path="/your-medicines" element={<YourMedicines />} />
                     <Route path="/dietary" element={<Dietary />} />
