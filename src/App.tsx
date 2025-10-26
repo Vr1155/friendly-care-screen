@@ -14,7 +14,6 @@ import Appointments from "./pages/Appointments";
 import YourMedicines from "./pages/YourMedicines";
 import CheckIn from "./pages/CheckIn";
 import UploadReports from "./pages/UploadReports";
-import UploadPrescriptions from "./pages/UploadPrescriptions";
 import Profile from "./pages/Profile";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
@@ -55,7 +54,6 @@ const App = () => (
                           <Route path="/your-medicines" element={<YourMedicines />} />
                           <Route path="/check-in" element={<CheckIn />} />
                           <Route path="/upload-reports" element={<UploadReports />} />
-                          <Route path="/upload-prescriptions" element={<UploadPrescriptions />} />
                           <Route path="/profile" element={<Profile />} />
                           <Route path="*" element={<NotFound />} />
                         </Routes>

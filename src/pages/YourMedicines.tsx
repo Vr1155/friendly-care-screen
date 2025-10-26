@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { Pill } from "lucide-react";
+import { Pill, Upload } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 const medicines = [
   { name: "Atorbin", dosage: "20mg", frequency: "1/day" },
@@ -28,14 +32,73 @@ export default function YourMedicines() {
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-foreground flex items-center gap-3 mb-2">
-          <Pill className="h-10 w-10 text-primary" />
-          Your Medicines
-        </h1>
-        <p className="text-xl text-muted-foreground">
-          Extracted from your prescriptions
-        </p>
+      <div className="mb-8 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-4xl font-bold text-foreground flex items-center gap-3 mb-2">
+            <Pill className="h-10 w-10 text-primary" />
+            Your Medicines
+          </h1>
+          <p className="text-xl text-muted-foreground">
+            Extracted from your prescriptions
+          </p>
+        </div>
+        
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button size="lg" className="text-lg px-6">
+              <Upload className="h-5 w-5 mr-2" />
+              Upload Prescription
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2 text-2xl">
+                <Pill className="h-6 w-6 text-primary" />
+                Upload Prescription
+              </DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 pt-4">
+              <div className="space-y-2">
+                <Label htmlFor="doctor-name" className="text-base">Doctor's Name</Label>
+                <Input id="doctor-name" placeholder="Enter doctor's name" className="text-lg py-5" />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="prescription-date" className="text-base">Prescription Date</Label>
+                <Input id="prescription-date" type="date" className="text-lg py-5" />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="medication" className="text-base">Medication Details</Label>
+                <Textarea 
+                  id="medication" 
+                  placeholder="Enter medication names, dosage, and instructions"
+                  rows={4}
+                  className="text-lg"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="prescription-file" className="text-base">Upload Prescription Image</Label>
+                <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary/50 transition-colors">
+                  <Upload className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-base text-muted-foreground mb-2">
+                    Drag and drop your prescription file here, or click to browse
+                  </p>
+                  <Input id="prescription-file" type="file" className="hidden" accept="image/*,.pdf" />
+                  <Button variant="outline" size="lg" onClick={() => document.getElementById('prescription-file')?.click()}>
+                    Choose File
+                  </Button>
+                </div>
+              </div>
+              
+              <Button className="w-full" size="lg">
+                <Upload className="h-5 w-5 mr-2" />
+                Upload Prescription
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
