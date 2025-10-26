@@ -9,8 +9,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { UserProfile } from "@/components/UserProfile";
 import Index from "./pages/Index";
 import YourDoctors from "./pages/YourDoctors";
-import UpcomingAppointments from "./pages/UpcomingAppointments";
-import Schedule from "./pages/Schedule";
+import Appointments from "./pages/Appointments";
 import CheckIn from "./pages/CheckIn";
 import UploadReports from "./pages/UploadReports";
 import UploadPrescriptions from "./pages/UploadPrescriptions";
@@ -47,8 +46,7 @@ const App = () => (
                         <Routes>
                           <Route path="/" element={<Index />} />
                           <Route path="/your-doctors" element={<YourDoctors />} />
-                          <Route path="/upcoming-appointments" element={<UpcomingAppointments />} />
-                          <Route path="/schedule" element={<Schedule />} />
+                          <Route path="/appointments" element={<Appointments />} />
                           <Route path="/check-in" element={<CheckIn />} />
                           <Route path="/upload-reports" element={<UploadReports />} />
                           <Route path="/upload-prescriptions" element={<UploadPrescriptions />} />

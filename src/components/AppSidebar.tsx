@@ -1,4 +1,4 @@
-import { Calendar, FileText, Upload, Pill, Home, Stethoscope, CalendarCheck } from "lucide-react";
+import { Calendar, FileText, Upload, Pill, Home, Stethoscope } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 import {
@@ -16,8 +16,7 @@ import {
 const menuItems = [
   { title: "Home", url: "/", icon: Home },
   { title: "Your Doctors", url: "/your-doctors", icon: Stethoscope },
-  { title: "Upcoming Appointments", url: "/upcoming-appointments", icon: CalendarCheck },
-  { title: "Schedule Doctor Appointment", url: "/schedule", icon: Calendar },
+  { title: "Appointments", url: "/appointments", icon: Calendar },
   { title: "Check-in Reports", url: "/check-in", icon: FileText },
   { title: "Upload Reports", url: "/upload-reports", icon: Upload },
   { title: "Upload Prescriptions", url: "/upload-prescriptions", icon: Pill },
