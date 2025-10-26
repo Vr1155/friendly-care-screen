@@ -32,16 +32,19 @@ const prescriptionFiles = [
     filename: "prescription_oct_2025.pdf",
     type: "pdf",
     uploadDate: "Oct 20, 2025",
+    fileUrl: "/prescriptions/prescription_oct_2025.pdf",
   },
   {
     filename: "rx_dr_smith_heart.png",
     type: "image",
     uploadDate: "Oct 20, 2025",
+    fileUrl: "/prescriptions/rx_dr_smith_heart.png",
   },
 ];
 
 export default function YourMedicines() {
   const [activeTab, setActiveTab] = useState("medicines");
+  const [previewFile, setPreviewFile] = useState<{ filename: string; type: string; fileUrl: string } | null>(null);
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">
@@ -171,7 +174,11 @@ export default function YourMedicines() {
 
           <div className="grid gap-6">
             {prescriptionFiles.map((file, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
+              <Card 
+                key={index} 
+                className="hover:shadow-lg transition-shadow cursor-pointer"
+                onClick={() => setPreviewFile(file)}
+              >
                 <CardHeader className="pb-4">
                   <div className="flex items-start gap-4">
                     <div className="p-3 rounded-full bg-primary/10">
@@ -195,6 +202,31 @@ export default function YourMedicines() {
             ))}
           </div>
         </TabsContent>
+
+        <Dialog open={!!previewFile} onOpenChange={() => setPreviewFile(null)}>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="text-2xl">
+                {previewFile?.filename}
+              </DialogTitle>
+            </DialogHeader>
+            <div className="mt-4">
+              {previewFile?.type === "image" ? (
+                <img 
+                  src={previewFile.fileUrl} 
+                  alt={previewFile.filename}
+                  className="w-full h-auto rounded-lg"
+                />
+              ) : previewFile?.type === "pdf" ? (
+                <iframe
+                  src={previewFile.fileUrl}
+                  className="w-full h-[600px] rounded-lg"
+                  title={previewFile.filename}
+                />
+              ) : null}
+            </div>
+          </DialogContent>
+        </Dialog>
 
         <TabsContent value="alerts" className="space-y-6">
           <div className="mb-6">
