@@ -39,13 +39,6 @@ const ChatInterface = () => {
   return (
     <section className="py-20 px-4" id="chat">
       <div className="container mx-auto max-w-4xl">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold mb-4 text-foreground">Try It Now</h2>
-          <p className="text-muted-foreground text-lg">
-            Start a conversation and experience personalized health guidance
-          </p>
-        </div>
-
         <Card className="bg-[var(--gradient-card)] shadow-[var(--shadow-soft)] border-border/50">
           <div className="h-[500px] flex flex-col">
             <div className="flex-1 overflow-y-auto p-6 space-y-4">
