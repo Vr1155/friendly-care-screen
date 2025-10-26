@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Check, AlertCircle, MessageCircle, Calendar, Pill, UserPlus, MoreVertical, Phone } from "lucide-react";
+import { Check, AlertCircle, MessageCircle, Calendar, Pill, UserPlus, MoreVertical, Phone, Circle, Utensils, Activity, Moon } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { PageHeader } from "@/components/PageHeader";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -42,6 +43,13 @@ const Index = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isAddDoctorOpen, setIsAddDoctorOpen] = useState(false);
   const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [checkIns, setCheckIns] = useState([
+    { id: 1, label: "Lunch taken", icon: Utensils, completed: true },
+    { id: 2, label: "Cholesterol pill taken", icon: Pill, completed: true },
+    { id: 3, label: "Exercise (go for a walk)", icon: Activity, completed: false },
+    { id: 4, label: "Dinner yet to be taken", icon: Utensils, completed: false },
+    { id: 5, label: "Sleep (8 hrs)", icon: Moon, completed: false },
+  ]);
   const [caregivers, setCaregivers] = useState<Caregiver[]>([]);
   const [doctorForm, setDoctorForm] = useState({
     first_name: "",
@@ -184,6 +192,18 @@ const Index = () => {
     });
   };
 
+  const toggleCheckIn = (id: number) => {
+    setCheckIns(prev => 
+      prev.map(item => 
+        item.id === id ? { ...item, completed: !item.completed } : item
+      )
+    );
+  };
+
+  const completedCount = checkIns.filter(item => item.completed).length;
+  const totalCount = checkIns.length;
+  const completionPercentage = Math.round((completedCount / totalCount) * 100);
+
   return (
     <>
       <PageHeader currentDate={currentDate} />
@@ -211,6 +231,51 @@ const Index = () => {
                 <Check className="w-6 h-6 text-primary" />
               </div>
             </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Daily Check-In Progress */}
+      <div className="grid grid-cols-1 gap-4">
+        <Card className="shadow-[var(--shadow-soft)]">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-xl">Daily Check-Ins</CardTitle>
+              <span className="text-sm font-medium text-muted-foreground">
+                {completedCount}/{totalCount} completed — {completionPercentage}%
+              </span>
+            </div>
+            <Progress value={completionPercentage} className="mt-2" />
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {checkIns.map((item) => {
+              const ItemIcon = item.icon;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => toggleCheckIn(item.id)}
+                  className="w-full text-left p-3 rounded-lg hover:bg-accent transition-colors flex items-center gap-3"
+                >
+                  <div className={`w-6 h-6 flex items-center justify-center flex-shrink-0 transition-all ${
+                    item.completed ? 'text-teal-600' : 'text-muted-foreground'
+                  }`}>
+                    {item.completed ? (
+                      <Check className="w-6 h-6 animate-scale-in" />
+                    ) : (
+                      <Circle className="w-6 h-6" />
+                    )}
+                  </div>
+                  <ItemIcon className={`w-5 h-5 flex-shrink-0 ${
+                    item.completed ? 'text-teal-600' : 'text-muted-foreground'
+                  }`} />
+                  <span className={`text-base ${
+                    item.completed ? 'text-foreground line-through' : 'text-foreground'
+                  }`}>
+                    {item.label}
+                  </span>
+                </button>
+              );
+            })}
           </CardContent>
         </Card>
       </div>
