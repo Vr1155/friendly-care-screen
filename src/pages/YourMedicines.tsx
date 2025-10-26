@@ -10,11 +10,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 const medicines = [
-  { name: "Atorbin", dosage: "20mg", frequency: "1/day" },
-  { name: "Neurocil", dosage: "5mg", frequency: "1/night" },
-  { name: "Cardiox", dosage: "50mg", frequency: "2/day" },
-  { name: "Flexorin", dosage: "200mg", frequency: "as needed" },
+  { name: "Atorbin", dosage: "20mg", frequency: "1/day", tag: "cholesterol control" },
+  { name: "Neurocil", dosage: "5mg", frequency: "1/night", tag: "sleep aid" },
+  { name: "Cardiox", dosage: "50mg", frequency: "2/day", tag: "heart health" },
+  { name: "Flexorin", dosage: "200mg", frequency: "as needed", tag: "pain relief" },
 ];
+
+const filterTags = ["all", "cholesterol control", "sleep aid", "heart health", "pain relief"];
 
 const conflicts = [
   {
@@ -45,6 +47,11 @@ const prescriptionFiles = [
 export default function YourMedicines() {
   const [activeTab, setActiveTab] = useState("medicines");
   const [previewFile, setPreviewFile] = useState<{ filename: string; type: string; fileUrl: string } | null>(null);
+  const [selectedFilter, setSelectedFilter] = useState("all");
+
+  const filteredMedicines = selectedFilter === "all" 
+    ? medicines 
+    : medicines.filter(medicine => medicine.tag === selectedFilter);
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">
@@ -131,8 +138,22 @@ export default function YourMedicines() {
         </TabsList>
 
         <TabsContent value="medicines" className="space-y-6">
+          <div className="flex flex-wrap gap-3 mb-6">
+            {filterTags.map((tag) => (
+              <Button
+                key={tag}
+                variant={selectedFilter === tag ? "default" : "outline"}
+                size="lg"
+                className="text-base capitalize"
+                onClick={() => setSelectedFilter(tag)}
+              >
+                {tag}
+              </Button>
+            ))}
+          </div>
+
           <div className="grid gap-6">
-            {medicines.map((medicine, index) => (
+            {filteredMedicines.map((medicine, index) => (
               <Card key={index} className="hover:shadow-lg transition-shadow">
                 <CardHeader className="pb-4">
                   <div className="flex items-start gap-4">
