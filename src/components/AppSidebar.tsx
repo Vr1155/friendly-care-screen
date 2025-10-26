@@ -28,7 +28,7 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>MedGuard Buffalo</SidebarGroupLabel>
+          <SidebarGroupLabel>MedGuard</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
