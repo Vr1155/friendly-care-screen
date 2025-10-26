@@ -1,9 +1,293 @@
-import ChatInterface from "@/components/ChatInterface";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { Bell, Check, Pill, AlertCircle, MessageCircle, Calendar, Heart, Upload } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Notifications } from "@/components/Notifications";
+import { UserProfile } from "@/components/UserProfile";
 
 const Index = () => {
+  const navigate = useNavigate();
+  const [userName, setUserName] = useState("there");
+  const [currentDate, setCurrentDate] = useState("");
+
+  useEffect(() => {
+    fetchUserProfile();
+    updateDate();
+  }, []);
+
+  const fetchUserProfile = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("full_name")
+        .eq("id", user.id)
+        .single();
+
+      if (profile?.full_name) {
+        const firstName = profile.full_name.split(" ")[0];
+        setUserName(firstName);
+      }
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+    }
+  };
+
+  const updateDate = () => {
+    const now = new Date();
+    const options: Intl.DateTimeFormatOptions = { 
+      weekday: 'long', 
+      month: 'long', 
+      day: 'numeric' 
+    };
+    setCurrentDate(now.toLocaleDateString('en-US', options).toLowerCase());
+  };
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "good morning";
+    if (hour < 18) return "good afternoon";
+    return "good evening";
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
-      <ChatInterface />
+    <div className="min-h-screen bg-background p-4 md:p-6 space-y-6">
+      {/* Top Header */}
+      <header className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
+            <Heart className="w-6 h-6 text-primary-foreground" />
+          </div>
+          <span className="text-xl font-semibold text-foreground">MedGuard</span>
+        </div>
+        <p className="text-base text-muted-foreground hidden md:block">{currentDate}</p>
+        <div className="flex items-center gap-3">
+          <Notifications />
+          <UserProfile />
+        </div>
+      </header>
+
+      {/* Mobile Date */}
+      <p className="text-sm text-muted-foreground md:hidden text-center">{currentDate}</p>
+
+      {/* Greeting Hero */}
+      <div className="text-center py-4">
+        <h1 className="text-2xl md:text-3xl font-medium text-foreground">
+          {getGreeting()}, {userName}, you're taking great care of yourself today.
+        </h1>
+      </div>
+
+      {/* Key Health Snapshot Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Card className="shadow-[var(--shadow-soft)]">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-xl">Meds today</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-3xl font-bold text-foreground">3 of 5 taken</p>
+                <p className="text-sm text-muted-foreground mt-1">Only two pills left for the day</p>
+              </div>
+              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                <Check className="w-6 h-6 text-primary" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="shadow-[var(--shadow-soft)]">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-xl">Wellness status</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-3xl font-bold text-foreground">Feeling good</p>
+              </div>
+              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                <Check className="w-6 h-6 text-primary" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Primary Action Buttons */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Button 
+          variant="outline" 
+          size="lg" 
+          className="h-20 text-lg flex flex-col gap-2"
+          onClick={() => navigate("/your-medicines")}
+        >
+          <Pill className="w-6 h-6" />
+          <span>Take medication</span>
+        </Button>
+        <Button 
+          variant="outline" 
+          size="lg" 
+          className="h-20 text-lg flex flex-col gap-2"
+          onClick={() => navigate("/your-medicines")}
+        >
+          <AlertCircle className="w-6 h-6" />
+          <span>Check side effects</span>
+        </Button>
+        <Button 
+          variant="outline" 
+          size="lg" 
+          className="h-20 text-lg flex flex-col gap-2"
+        >
+          <MessageCircle className="w-6 h-6" />
+          <span>Ask caregiver</span>
+        </Button>
+      </div>
+
+      {/* AI Chat Preview Card */}
+      <Card className="shadow-[var(--shadow-soft)] bg-accent/50 cursor-pointer hover:bg-accent/70 transition-colors" onClick={() => navigate("/")}>
+        <CardContent className="p-4">
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+              <MessageCircle className="w-4 h-4 text-primary-foreground" />
+            </div>
+            <p className="text-sm text-foreground">You did your morning walk — keep it up. Ask me anything...</p>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Two Column Layout for Upcoming & Caregiver/Diet */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        {/* Upcoming Items Section */}
+        <div className="lg:col-span-2 space-y-4">
+          <h2 className="text-xl font-semibold text-foreground">Upcoming</h2>
+          <Card className="shadow-[var(--shadow-soft)]">
+            <CardContent className="p-4 space-y-3">
+              <button 
+                className="w-full text-left p-3 rounded-lg hover:bg-accent transition-colors flex items-center gap-3"
+                onClick={() => navigate("/your-medicines")}
+              >
+                <Pill className="w-5 h-5 text-primary flex-shrink-0" />
+                <span className="text-base text-foreground">1:00 pm — take blood pressure pill</span>
+              </button>
+              <button 
+                className="w-full text-left p-3 rounded-lg hover:bg-accent transition-colors flex items-center gap-3"
+                onClick={() => navigate("/appointments")}
+              >
+                <Calendar className="w-5 h-5 text-primary flex-shrink-0" />
+                <span className="text-base text-foreground">Tomorrow 11:30 am — cardiologist appointment</span>
+              </button>
+              <button 
+                className="w-full text-left p-3 rounded-lg hover:bg-accent transition-colors flex items-center gap-3"
+                onClick={() => navigate("/your-medicines")}
+              >
+                <Pill className="w-5 h-5 text-primary flex-shrink-0" />
+                <span className="text-base text-foreground">Saturday — refill cholesterol meds</span>
+              </button>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Right Column - Caregiver & Diet Cards */}
+        <div className="space-y-4">
+          {/* Caregiver Reassurance Card */}
+          <Card className="shadow-[var(--shadow-soft)]">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg">Caregiver</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex items-center gap-3">
+                <Avatar className="w-12 h-12">
+                  <AvatarImage src="" />
+                  <AvatarFallback className="bg-primary/10 text-primary">JD</AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="font-medium text-foreground">Jane Doe</p>
+                  <p className="text-sm text-muted-foreground">Primary Caregiver</p>
+                </div>
+              </div>
+              <Badge variant="secondary" className="w-full justify-center py-2">
+                <Check className="w-4 h-4 mr-1" />
+                No alerts, everything looks good
+              </Badge>
+              <Button variant="default" className="w-full" size="lg">
+                Share this week's progress
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Diet/Nutrition Card */}
+          <Card className="shadow-[var(--shadow-soft)]">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg">Diet</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex items-center justify-between">
+                <p className="text-base text-foreground">Add a vegetable to dinner</p>
+                <Badge variant="secondary">Good</Badge>
+              </div>
+              <Button 
+                variant="outline" 
+                className="w-full" 
+                size="lg"
+                onClick={() => navigate("/upload-prescriptions")}
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                Upload prescription
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      {/* Bottom Navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border shadow-[var(--shadow-soft)] z-50">
+        <div className="flex justify-around items-center h-16 max-w-2xl mx-auto">
+          <button 
+            onClick={() => navigate("/")}
+            className="flex flex-col items-center justify-center gap-1 px-3 py-2 text-primary"
+          >
+            <Heart className="w-5 h-5" />
+            <span className="text-xs">Home</span>
+          </button>
+          <button 
+            onClick={() => navigate("/appointments")}
+            className="flex flex-col items-center justify-center gap-1 px-3 py-2 text-muted-foreground hover:text-primary transition-colors"
+          >
+            <Calendar className="w-5 h-5" />
+            <span className="text-xs">Appointments</span>
+          </button>
+          <button 
+            onClick={() => navigate("/your-medicines")}
+            className="flex flex-col items-center justify-center gap-1 px-3 py-2 text-muted-foreground hover:text-primary transition-colors"
+          >
+            <Pill className="w-5 h-5" />
+            <span className="text-xs">Meds</span>
+          </button>
+          <button 
+            onClick={() => navigate("/dietary")}
+            className="flex flex-col items-center justify-center gap-1 px-3 py-2 text-muted-foreground hover:text-primary transition-colors"
+          >
+            <Heart className="w-5 h-5" />
+            <span className="text-xs">Dietary</span>
+          </button>
+          <button 
+            onClick={() => navigate("/your-network")}
+            className="flex flex-col items-center justify-center gap-1 px-3 py-2 text-muted-foreground hover:text-primary transition-colors"
+          >
+            <Heart className="w-5 h-5" />
+            <span className="text-xs">Coverage</span>
+          </button>
+        </div>
+      </nav>
+
+      {/* Bottom Padding to prevent content from being hidden behind nav */}
+      <div className="h-20"></div>
     </div>
   );
 };
