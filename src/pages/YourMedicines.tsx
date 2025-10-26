@@ -139,19 +139,40 @@ export default function YourMedicines() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3 mb-8">
+        <TabsList className="grid w-full grid-cols-2 mb-8">
           <TabsTrigger value="medicines">
             Medicines
           </TabsTrigger>
           <TabsTrigger value="prescriptions">
             Prescriptions
           </TabsTrigger>
-          <TabsTrigger value="alerts">
-            Conflicts
-          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="medicines" className="space-y-6">
+          {conflicts.length > 0 && (
+            <Alert variant="destructive" className="mb-6">
+              <AlertTitle className="text-lg font-semibold flex items-center gap-2">
+                ⚠️ {conflicts.length} Drug Interaction{conflicts.length > 1 ? 's' : ''} Detected
+              </AlertTitle>
+              <AlertDescription className="mt-3 space-y-3">
+                {conflicts.map((conflict, index) => (
+                  <div key={index} className="pb-3 last:pb-0 border-b last:border-b-0 border-destructive/20">
+                    <p className="font-medium mb-1">{conflict.title}</p>
+                    <p className="text-sm">{conflict.message}</p>
+                  </div>
+                ))}
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="mt-3 border-destructive/50 hover:bg-destructive/10"
+                  onClick={() => {/* Contact doctor action */}}
+                >
+                  Contact Doctor
+                </Button>
+              </AlertDescription>
+            </Alert>
+          )}
+
           <div className="flex items-center gap-3 mb-6">
             <Label htmlFor="filter-select" className="font-medium whitespace-nowrap">
               Filter by:
@@ -194,14 +215,6 @@ export default function YourMedicines() {
               </Card>
             ))}
           </div>
-
-          <Button
-            size="lg"
-            className="w-full mt-8"
-            onClick={() => setActiveTab("alerts")}
-          >
-            Check Conflicts
-          </Button>
         </TabsContent>
 
         <TabsContent value="prescriptions" className="space-y-6">
@@ -270,43 +283,6 @@ export default function YourMedicines() {
           </DialogContent>
         </Dialog>
 
-        <TabsContent value="alerts" className="space-y-6">
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold text-destructive mb-2">
-              Conflicts Detected
-            </h2>
-            <p className="text-base text-muted-foreground">
-              Please review these potential medication interactions
-            </p>
-          </div>
-
-          <div className="space-y-6">
-            {conflicts.map((conflict, index) => (
-              <Alert key={index} variant="destructive" className="p-6">
-                <AlertTitle className="text-xl font-semibold mb-3">
-                  {conflict.title}
-                </AlertTitle>
-                <AlertDescription className="text-base mb-4">
-                  {conflict.message}
-                </AlertDescription>
-              </Alert>
-            ))}
-          </div>
-
-          <div className="grid gap-4 mt-8">
-            <Button size="lg" className="w-full">
-              Contact Doctor
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="w-full"
-              onClick={() => setActiveTab("medicines")}
-            >
-              Mark as Acknowledged
-            </Button>
-          </div>
-        </TabsContent>
       </Tabs>
     </div>
   );
