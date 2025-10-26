@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calendar } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
@@ -7,8 +8,17 @@ import ScheduleAppointmentTab from "@/components/appointments/ScheduleAppointmen
 import PastAppointmentsTab from "@/components/appointments/PastAppointmentsTab";
 
 export default function Appointments() {
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState("upcoming");
   const [selectedDoctorId, setSelectedDoctorId] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Check if we received a doctor selection from navigation
+    if (location.state?.selectedDoctor && location.state?.openScheduleTab) {
+      setSelectedDoctorId(location.state.selectedDoctor.id);
+      setActiveTab("schedule");
+    }
+  }, [location.state]);
 
   const handleScheduleForDoctor = (doctorId: string) => {
     setSelectedDoctorId(doctorId);

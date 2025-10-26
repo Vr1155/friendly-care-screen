@@ -14,12 +14,23 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import ChatInterface from "@/components/ChatInterface";
 import { useToast } from "@/hooks/use-toast";
 
+interface Doctor {
+  id: string;
+  first_name: string;
+  last_name: string;
+  doctor_type: string;
+  contact: string;
+  address: string;
+  photo_url?: string;
+}
+
 const Index = () => {
   const navigate = useNavigate();
   const [userName, setUserName] = useState("there");
   const [currentDate, setCurrentDate] = useState("");
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isAddDoctorOpen, setIsAddDoctorOpen] = useState(false);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [doctorForm, setDoctorForm] = useState({
     first_name: "",
     last_name: "",
@@ -32,6 +43,7 @@ const Index = () => {
   useEffect(() => {
     fetchUserProfile();
     updateDate();
+    fetchDoctors();
   }, []);
 
   const fetchUserProfile = async () => {
@@ -62,6 +74,23 @@ const Index = () => {
       day: 'numeric' 
     };
     setCurrentDate(now.toLocaleDateString('en-US', options));
+  };
+
+  const fetchDoctors = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from("doctors")
+        .select("*")
+        .eq("user_id", user.id);
+
+      if (error) throw error;
+      setDoctors(data || []);
+    } catch (error: any) {
+      console.error("Error fetching doctors:", error);
+    }
   };
 
   const getGreeting = () => {
@@ -97,6 +126,7 @@ const Index = () => {
         contact: "",
         address: "",
       });
+      fetchDoctors(); // Refresh the doctors list
     } catch (error: any) {
       toast({
         title: "Error",
@@ -106,8 +136,13 @@ const Index = () => {
     }
   };
 
-  const handleScheduleAppointment = (doctorName: string) => {
-    navigate("/appointments");
+  const handleScheduleAppointment = (doctor: Doctor) => {
+    navigate("/appointments", { 
+      state: { 
+        selectedDoctor: doctor,
+        openScheduleTab: true 
+      } 
+    });
   };
 
   const handleCall = (contact: string, doctorName: string) => {
@@ -247,73 +282,43 @@ const Index = () => {
       <div className="space-y-4">
         <h2 className="text-xl font-semibold text-foreground">Your Doctors</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <Card className="shadow-[var(--shadow-soft)] relative">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="absolute top-2 right-2 h-8 w-8 z-10"
-                >
-                  <MoreVertical className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-background">
-                <DropdownMenuItem onClick={() => handleScheduleAppointment("Dr. Elephant Smith")}>
-                  <Calendar className="mr-2 h-4 w-4" />
-                  Schedule Appointment
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleCall("555-0123", "Dr. Elephant Smith")}>
-                  <Phone className="mr-2 h-4 w-4" />
-                  Call
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <CardContent className="p-6 flex flex-col items-center text-center gap-3">
-              <Avatar className="w-20 h-20">
-                <AvatarImage src="/images/dr-elephant.png" />
-                <AvatarFallback className="bg-primary/10 text-primary text-xl">ES</AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="font-semibold text-foreground">Dr. Elephant Smith</p>
-                <p className="text-sm text-muted-foreground">Cardiologist</p>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="shadow-[var(--shadow-soft)] relative">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="absolute top-2 right-2 h-8 w-8 z-10"
-                >
-                  <MoreVertical className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-background">
-                <DropdownMenuItem onClick={() => handleScheduleAppointment("Dr. Rabbit Jones")}>
-                  <Calendar className="mr-2 h-4 w-4" />
-                  Schedule Appointment
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleCall("555-0456", "Dr. Rabbit Jones")}>
-                  <Phone className="mr-2 h-4 w-4" />
-                  Call
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <CardContent className="p-6 flex flex-col items-center text-center gap-3">
-              <Avatar className="w-20 h-20">
-                <AvatarImage src="/images/dr-rabbit.png" />
-                <AvatarFallback className="bg-primary/10 text-primary text-xl">RJ</AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="font-semibold text-foreground">Dr. Rabbit Jones</p>
-                <p className="text-sm text-muted-foreground">Primary Care</p>
-              </div>
-            </CardContent>
-          </Card>
+          {doctors.map((doctor) => (
+            <Card key={doctor.id} className="shadow-[var(--shadow-soft)] relative">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="absolute top-2 right-2 h-8 w-8 z-10"
+                  >
+                    <MoreVertical className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="bg-background">
+                  <DropdownMenuItem onClick={() => handleScheduleAppointment(doctor)}>
+                    <Calendar className="mr-2 h-4 w-4" />
+                    Schedule Appointment
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleCall(doctor.contact, `Dr. ${doctor.first_name} ${doctor.last_name}`)}>
+                    <Phone className="mr-2 h-4 w-4" />
+                    Call
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <CardContent className="p-6 flex flex-col items-center text-center gap-3">
+                <Avatar className="w-20 h-20">
+                  <AvatarImage src={doctor.photo_url} />
+                  <AvatarFallback className="bg-primary/10 text-primary text-xl">
+                    {doctor.first_name[0]}{doctor.last_name[0]}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="font-semibold text-foreground">Dr. {doctor.first_name} {doctor.last_name}</p>
+                  <p className="text-sm text-muted-foreground">{doctor.doctor_type}</p>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
 
           <Dialog open={isAddDoctorOpen} onOpenChange={setIsAddDoctorOpen}>
             <DialogTrigger asChild>

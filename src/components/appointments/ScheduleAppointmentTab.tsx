@@ -42,9 +42,13 @@ export default function ScheduleAppointmentTab({ preSelectedDoctorId }: Schedule
 
   const fetchDoctors = async () => {
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not authenticated");
+
       const { data, error } = await supabase
         .from("doctors")
         .select("id, first_name, last_name, doctor_type")
+        .eq("user_id", user.id)
         .order("first_name", { ascending: true });
 
       if (error) throw error;
